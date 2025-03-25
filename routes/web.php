@@ -36,7 +36,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/newsletter', [BackendController::class, 'newsletter'])->name('newsletter');
     Route::post('/newsletter/update', [BackendController::class, 'newsletter_update'])->name('newsletter.update');
     Route::get('/newsletter/delete/{id}', [BackendController::class, 'newsletter_delete'])->name('delete.newsletter');
-    
+    //User List
+    Route::get('/user/list', [BackendController::class, 'userList'])->name('user.list');
+    Route::post('/user/registerByAdmin' , [BackendController::class, 'registerByAdmin'])->name('user.registerByAdmin');
+    Route::post('/user/updateByAdmin/{id}' , [BackendController::class, 'userUpdateByAdmin'])->name('user.updateByAdmin');
+    Route::get('/user/deleteByAdmin/{id}', [BackendController::class, 'userDeleteByAdmin'])->name('delete.userByAdmin');
+
     //Blog Section
     Route::get('/blog/list', [BlogController::class, 'blogList'])->name('blog.list');
     Route::get('/blog/create', [BlogController::class, 'blogCreate'])->name('blog.create');

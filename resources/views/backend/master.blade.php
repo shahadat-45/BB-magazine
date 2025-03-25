@@ -70,15 +70,15 @@
                 <span class="hide-menu">Newsletter</span>
               </a>
             </li>
-            {{-- <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ route('brands.list') }}" aria-expanded="false">
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('user.list') }}" aria-expanded="false">
                 <span>
                   <i class="ti ti-receipt-2"></i>
                 </span>
-                <span class="hide-menu">Brands</span>
+                <span class="hide-menu">Manage User</span>
               </a>
             </li>
-            <li class="sidebar-item">
+            {{-- <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('our_services') }}" aria-expanded="false">
                 <span>
                   <i class="ti ti-world"></i>
@@ -172,7 +172,12 @@
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="{{ asset('assets') }}/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                  @php $userProfile = App\Models\User::find(Auth::id())->image; @endphp
+                  @if ($userProfile)
+                    <img src="{{ asset($userProfile) }}" width="35" height="35" class="rounded-circle">
+                  @else
+                    <img src="{{ asset('assets/images/profile/default-profile-picture.webp') }}" width="35" height="35" class="rounded-circle">
+                  @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">

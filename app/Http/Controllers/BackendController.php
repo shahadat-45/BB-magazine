@@ -15,12 +15,15 @@ use App\Models\Service;
 use App\Models\Setting;
 use App\Models\Team;
 use App\Models\Testimonial;
+use App\Models\User;
 use Carbon\Carbon;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class BackendController extends Controller
 {
@@ -256,5 +259,105 @@ class BackendController extends Controller
         return back()->with([
             'content' => ($exists ? "Section Updated Successfully!" : "Section Created Successfully!"),
         ]);
+    }
+    public function userList(){
+        $users = User::all();
+        return view('backend.user', compact('users'));
+    }
+    public function registerByAdmin(Request $request){
+        // Validate input data
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
+            'role' => 'required|in:admin,editor,user',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Process image if uploaded
+        $imagePath = null;
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $manager = new ImageManager(new Driver());
+            $imageName = 'users_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
+            $img = $manager->read($image);
+            $img->save(public_path('backend/users/' . $imageName));  
+            $imagePath = 'backend/users/' . $imageName; 
+        }
+
+        // Create user
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => $request->role,
+            'image' => $imagePath,
+        ]);
+
+        return back()->with('success' , 'User registered successfully');
+    }
+
+    public function userUpdateByAdmin(Request $request , $id){
+        // Validate input data
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'role' => 'required|in:admin,editor,user',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $user = User::find($id);
+        // Process image if uploaded
+        if ($request->file('image')) {
+
+            if ($user->image) {
+                if (file_exists(public_path($user->image))) {
+                    unlink(public_path($user->image));
+                }
+            }
+
+            $image = $request->file('image');
+            $manager = new ImageManager(new Driver());
+            $imageName = 'users_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
+            $img = $manager->read($image);
+            $img->save(public_path('backend/users/' . $imageName));  
+            $imagePath = 'backend/users/' . $imageName;
+
+            $user->image = $imagePath;
+        }
+
+        $user->name = $request->name;
+        $user->role = $request->role;
+        $user->save();
+
+        return back()->with('success' , 'User Updated successfully');
+    }
+    public function userDeleteByAdmin($id){
+        $user = User::find($id);
+        
+        if (!$user) {
+            return back()->with('error', 'User not found');
+        }
+
+        // Prevent deletion if the user is currently logged in
+        if (Auth::check() && Auth::id() == $user->id) {
+            return back()->with('error', 'You cannot delete yourself');
+        }
+
+        // Delete user image if exists
+        if ($user->image) {
+            if(file_exists(public_path($user->image))) {
+                unlink(public_path($user->image));
+            }
+        }
+        
+        $user->delete();
+        return back()->with('success', 'User deleted successfully');
     }
 }
