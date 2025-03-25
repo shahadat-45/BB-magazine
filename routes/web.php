@@ -13,6 +13,7 @@ Route::post('/newsletter/store', [FrontendController::class, 'newsletter_store']
 Route::post('/contact/store', [FrontendController::class, 'storeContact'])->name('contact.store');
 
 //Pages
+Route::get('/under_construction', [FrontendController::class, 'underConstruction'])->name('under-construction');
 
 //Blogs
 Route::get('/page/blog', [BlogController::class, 'blog'])->name('page.blog');

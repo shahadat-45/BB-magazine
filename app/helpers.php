@@ -14,9 +14,7 @@ if (!function_exists('settings')) {
 function description($id) {
     return Description::find($id);
 }
-function services($limit) {
-    return Service::take($limit)->get();
-}
+
 function newsletter() {
     return Newsletter::find(1); 
 }

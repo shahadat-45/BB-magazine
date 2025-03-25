@@ -26,8 +26,10 @@ use Illuminate\Support\Str;
 class FrontendController extends Controller
 {
     public function index(Request $request){
-
-        return 'Okk';
+        return view('frontend.master');
+    }
+    public function underConstruction(){
+        return view('frontend.layouts.under-construction');
     }
     public function newsletter_store(Request $request){
 
