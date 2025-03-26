@@ -1,8 +1,9 @@
-<div>
-    @include("livewire.frontend.layouts.partials.hero-section")
-    @include("livewire.frontend.layouts.partials.latest-updates")
-    @include("livewire.frontend.layouts.partials.blog-section")
-    @livewire("frontend.subscriber.subscriber")
-    @include("livewire.frontend.layouts.partials.article-section")
-    @include("livewire.frontend.layouts.partials.gallery-section")
-</div>
+@extends('frontend.master')
+@section('content')
+@include('frontend.partials.hero-section')
+@include('frontend.partials.latest-updates')
+@include('frontend.partials.blog-section')
+@include('frontend.partials.news-letter')
+@include('frontend.partials.article-section')
+@include('frontend.partials.gallery-section')    
+@endsection

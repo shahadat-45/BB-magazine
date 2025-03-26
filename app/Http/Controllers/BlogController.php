@@ -39,7 +39,7 @@ class BlogController extends Controller
         return view('frontend.blog.index', compact(['blogs', 'categories']));
     }
 
-    public function blogView($id)
+    public function newsView($slug)
     {
         $blogs = Blog::orderBy('created_at', 'desc')->get();
         $blog = Blog::find($id);

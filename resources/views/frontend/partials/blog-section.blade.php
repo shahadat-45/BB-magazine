@@ -7,8 +7,8 @@
                 @foreach ($latestNews->take(2) as $news)
                     <div
                         class="relative {{ $loop->index == 0 ? "col-span-3" : "col-span-2" }} overflow-hidden bg-white shadow group">
-                        <a href="{{ route("news-detail", $news->slug) }}">
-                            <img src="{{ asset(@$news->thumbPhoto?->path) }}" alt="{{ $news->title }}"
+                        <a href="{{ route("news.view", $news->slug) }}">
+                            <img src="{{ asset($news->thumnail_image) }}" alt="{{ $news->title }}"
                                 class="h-[300px] w-full object-cover transition duration-1000 ease-in-out group-hover:scale-125" />
                             <div class="bg-opacity-30 absolute inset-0 flex items-end bg-black p-4">
                                 <h2
@@ -26,8 +26,8 @@
                 @foreach ($latestNews->slice(2, 2) as $news)
                     <div
                         class="relative {{ $loop->index == 0 ? "col-span-2" : "col-span-3" }} overflow-hidden bg-white shadow group">
-                        <a href="{{ route("news-detail", $news->slug) }}">
-                            <img src="{{ asset(@$news->thumbPhoto?->path) }}" alt="{{ $news->title }}"
+                        <a href="{{ route("news.view", $news->slug) }}">
+                            <img src="{{ asset($news->thumnail_image) }}" alt="{{ $news->title }}"
                                 class="h-[300px] w-full object-cover transition duration-1000 ease-in-out group-hover:scale-125" />
                             <div class="bg-opacity-30 absolute inset-0 flex items-end bg-black p-4">
                                 <h2
@@ -45,8 +45,8 @@
                 @foreach ($latestNews->slice(4, 2) as $news)
                     <div
                         class="relative {{ $loop->index == 0 ? "col-span-3" : "col-span-2" }} overflow-hidden bg-white shadow group">
-                        <a href="{{ route("news-detail", $news->slug) }}">
-                            <img src="{{ asset(@$news->thumbPhoto?->path) }}" alt="{{ $news->title }}"
+                        <a href="{{ route("news.view", $news->slug) }}">
+                            <img src="{{ asset($news->thumnail_image) }}" alt="{{ $news->title }}"
                                 class="h-[300px] w-full object-cover transition duration-1000 ease-in-out group-hover:scale-125" />
                             <div class="bg-opacity-30 absolute inset-0 flex items-end bg-black p-4">
                                 <h2
@@ -61,7 +61,7 @@
 
             <!-- All Articles Link -->
             <div class="pt-5 flex items-center text-sm text-gray-600 font-medium cursor-pointer uppercase">
-                <a href="{{ route("all-categories") }}" class="flex items-center">
+                <a href="" class="flex items-center">{{-- {{ route("all-categories") }} --}}
                     <span>All Articles</span>
                     <svg class="w-4 h-4 ml-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -103,7 +103,7 @@
                     @foreach ($magazines as $magazine)
                         <div class="swiper-slide">
                             <div class="bg-white border shadow-lg overflow-hidden group">
-                                <img src="{{ @$magazine->magazinePhoto?->path }}"
+                                <img src="{{ asset($magazine->thumnail_image) }}"
                                     class="w-full h-[400px] object-cover transition duration-700 ease-in-out group-hover:scale-110"
                                     alt="Magazine" />
                             </div>
@@ -121,7 +121,7 @@
                                 {{ str_pad($index + 1, 2, "0", STR_PAD_LEFT) }}
                             </span>
                             <div class="flex flex-col space-y-3">
-                                <a href="{{ route("news-detail", $news->slug) }}"
+                                <a href="{{ route("news.view", $news->slug) }}"
                                     class="hover:text-[#D2AB67] transition duration-500 ease-in-out">
                                     <p class="font-semibold">
                                         {{ $news->title }}
@@ -130,7 +130,7 @@
                                 <div class="flex items-center space-x-2 text-sm">
                                     <span class="font-semibold text-[#373737]">Written by</span>
                                     <span class="underline font-normal text-gray-500">
-                                        {{ @$news->createdBy?->name }}
+                                        {{ $news->author }}
                                     </span>
                                 </div>
                             </div>

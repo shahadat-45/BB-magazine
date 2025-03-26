@@ -15,10 +15,11 @@ Route::post('/contact/store', [FrontendController::class, 'storeContact'])->name
 
 //Pages
 Route::get('/under_construction', [FrontendController::class, 'underConstruction'])->name('under-construction');
+Route::get('/frontend/gallery', [FrontendController::class, 'frontendGallery'])->name('frontend.gallery');
 
 //Blogs
 Route::get('/page/blog', [BlogController::class, 'blog'])->name('page.blog');
-Route::get('/page/blog/view/{id}', [BlogController::class, 'blogView'])->name('page.blog.view');
+Route::get('/news/view/{slug}', [BlogController::class, 'newsView'])->name('news.view');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');

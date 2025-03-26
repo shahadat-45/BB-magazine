@@ -11,7 +11,7 @@
                 <span>🎬 Entertainment: New Movie Release This Weekend!</span>
                 <span>🌍 World: Last UN Announces Climate Change Policies!</span> --}}
                         @foreach ($latestUpdates as $latest)
-                            <a href="{{ route("news-detail", $latest->slug) }}"
+                            <a href="{{ route("news.view", $latest->slug) }}"{{--  --}}
                                 class="text-[#D2AB67] text-sm font-medium uppercase">
                                 {{ $latest->title }}
                             </a>

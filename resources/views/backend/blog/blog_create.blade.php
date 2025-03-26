@@ -30,7 +30,7 @@
                         <!-- Blog Short Description -->
                         <div class="mb-3">
                             <label for="short_description" class="form-label">Short Description</label>
-                            <input type="text" name="short_description"
+                            <input type="text" name="short_description" value="{{ old('short_description') }}" 
                                 class="form-control @error('short_description') is-invalid @enderror" id="short_description"
                                 placeholder="Enter a short description" >
                             @error('short_description')

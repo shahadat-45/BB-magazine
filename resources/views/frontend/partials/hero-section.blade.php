@@ -19,7 +19,7 @@
                     class="absolute uppercase w-[110%] md:w-[110%] max-w-[1200px] text-lg md:text-3xl z-10 px-8 py-5 md:px-16 md:py-8 font-semibold text-[#373737] bg-[#dbb574] md:text-left">
                     @foreach ($heroSliders as $index => $slider)
                         <span class="ribbon-text {{ $index == 0 ? "" : "hidden" }}">
-                            <a href="{{ route("news-detail", $slider->slug) }}">
+                            <a href="{{ route("news.view", $slider->slug) }}">{{--  --}}
                                 <span class="hidden md:inline">{{ Str::limit($slider->title, 100) }}</span>
                                 <span class="md:hidden">{{ Str::limit($slider->title, 20) }}</span>
                             </a>
@@ -31,9 +31,9 @@
             <div class="slider relative h-[700px]">
                 <div class="list">
                     @foreach ($heroSliders as $slider)
-                        <div class="item" data-content="{{ Str::limit($slider->short_content, 250) }}">
-                            <a href="{{ route("news-detail", $slider->slug) }}">
-                                <img src="{{ asset(@$slider->thumbPhoto?->path) }}" alt="{{ $slider->title }}">
+                        <div class="item" data-content="{{ Str::limit($slider->short_description, 250) }}">
+                            <a href="{{ route("news.view", $slider->slug) }}">{{--  --}}
+                                <img src="{{ asset($slider->thumnail_image) }}" alt="{{ $slider->title }}">
                             </a>
                         </div>
                     @endforeach
@@ -62,7 +62,7 @@
 
         <!-- Paragraph Below Carousel -->
         <div id="shortContent" class="text-[#373737] text-[14.5px] mt-11">
-            {{ Str::limit($heroSliders[0]->short_content, 250) }}
+            {{ Str::limit($heroSliders[0]->short_description, 250) }}
         </div>
     </div>
 </div>

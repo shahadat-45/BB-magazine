@@ -1,9 +1,9 @@
 <div x-data="galleryModal()" class="max-w-6xl mx-auto mt-20 px-7 lg:px-0">
     <div class="border-t border-gray-400 pt-8">
-        @foreach ($gallerySections as $gallerySection)
+        {{-- @foreach ($gallerySections as $gallerySection) --}}
             <div class="flex justify-between items-center mb-8">
-                <h2 class="text-lg md:text-2xl lg:text-3xl font-semibold uppercase">{{ $gallerySection->name }}</h2>
-                <a href="{{ route("frontend.gallery") }}"
+                <h2 class="text-lg md:text-2xl lg:text-3xl font-semibold uppercase">{{ '$gallerySection->name' }}</h2>
+                <a href=""{{ route("frontend.gallery") }}
                     class="text-sm text-gray-700 font-medium uppercase flex items-center">
                     ALL PICTURES
                     <svg class="w-4 h-4 ml-1 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -12,22 +12,9 @@
                     </svg>
                 </a>
             </div>
-            <p class="text-gray-700 mb-6">{{ $gallerySection->description }}</p>
-        @endforeach
-
+            <p class="text-gray-700 mb-6">{{ '$gallerySection->description' }}</p>
+        {{-- @endforeach --}}
         <!-- Gallery Grid -->
-        {{-- <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-            @foreach ($galleryImages as $index => $gallery)
-                @php
-                    $colSpan = in_array($index, [1, 3]) ? "col-span-2" : "col-span-5";
-                @endphp
-                <div class="{{ $colSpan }} overflow-hidden group cursor-pointer"
-                    @click="openModal({{ $index }})">
-                    <img src="{{ asset(@$gallery->galleryPhoto?->path) }}" alt="{{ @$gallery->galleryPhoto?->name }}"
-                        class="w-full h-[300px] object-cover transition duration-700 ease-in-out group-hover:scale-110" />
-                </div>
-            @endforeach
-        </div> --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3">
             @foreach ($galleryImages as $index => $gallery)
                 @php
@@ -35,7 +22,7 @@
                 @endphp
                 <div class="col-span-1 {{ $colSpan }} overflow-hidden group cursor-pointer"
                     @click="openModal({{ $index }})">
-                    <img src="{{ asset(@$gallery->galleryPhoto?->path) }}" alt="{{ @$gallery->galleryPhoto?->name }}"
+                    <img src="{{ asset($gallery->gallary_image) }}" alt=""
                         class="w-full h-[300px] object-cover transition duration-700 ease-in-out group-hover:scale-110" />
                 </div>
             @endforeach
@@ -89,7 +76,7 @@
         return {
             isOpen: false,
             currentIndex: 0,
-            images: @json($galleryImages->map(fn($img) => asset($img->galleryPhoto->path))),
+            images: @json($galleryImages->map(fn($img) => asset($img->gallary_image))),
 
             openModal(index) {
                 this.currentIndex = index;
