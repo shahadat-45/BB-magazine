@@ -61,6 +61,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/blog/delete/{id}', [BlogController::class, 'blogDelete'])->name('delete.blog');
     Route::get('/blog/edit/{id}', [BlogController::class, 'editBlog'])->name('edit.blog');
     Route::post('/blog/update/{id}', [BlogController::class, 'blogUpdate'])->name('blog.update');
+    Route::post('/blog/update/{id}', [BlogController::class, 'blogUpdate'])->name('blog.update');
+    Route::get('district-get/ajax/{division_id}',[BlogController::class, 'getDistrictWithAjax']);
+    Route::get('state-get/ajax/{district_id}',[BlogController::class, 'getStateWithAjax']);
     //category
     Route::post('/blog/category/store', [BlogController::class, 'blogCategoryStore'])->name('blog.category.store');
     Route::get('/blog/category/delete/{id}', [BlogController::class, 'blogCategoryDelete'])->name('delete.blog.category');
