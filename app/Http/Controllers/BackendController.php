@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class BackendController extends Controller
 {
@@ -221,11 +222,22 @@ class BackendController extends Controller
         return back()->with('mission', 'Mission Content Updated Successfully!');
     }
     
-    public function newsletter(){
-        $data = Newsletter::find(1);
-        $emails = Emails::paginate(10);
-        $contacts = Contact::paginate(10);
-        return view('backend.newsletter', compact(['data' , 'emails' , 'contacts']));
+    public function newsletter(Request $request)
+    {
+        if ($request->ajax()) {
+            $emails = Emails::select(['id', 'email']);
+            return DataTables::of($emails)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    return '<a href="' . route('delete.newsletter', $row->id) . '" class="btn btn-sm btn-danger">
+                                <i class="ti ti-trash"></i>
+                            </a>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        
+        return view('backend.newsletter');
     }
     public function newsletter_update(Request $request){
         $data = Newsletter::find(1);

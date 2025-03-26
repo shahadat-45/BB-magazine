@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\GallaryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BackendController;
 use App\Http\Controllers\BlogController;
@@ -43,6 +44,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/user/updateByAdmin/{id}' , [BackendController::class, 'userUpdateByAdmin'])->name('user.updateByAdmin');
     Route::get('/user/deleteByAdmin/{id}', [BackendController::class, 'userDeleteByAdmin'])->name('delete.userByAdmin');
 
+    //gallary List
+    Route::controller(GallaryController::class)->group(function(){
+
+        Route::get('/gallery/list', 'galleryList')->name('gallery.list');
+        Route::post('/gallery/store', 'galleryStore')->name('gallery.store');
+        Route::post('/gallery/update/{id}', 'galleryUpdate')->name('gallery.update');
+        Route::get('/gallery/delete/{id}', 'galleryDelete')->name('gallery.delete');
+        Route::post('/gallery/toggle_status', 'toggleStatus')->name('gallery.toggleStatus');
+    });
+
     //Blog Section
     Route::get('/blog/list', [BlogController::class, 'blogList'])->name('blog.list');
     Route::get('/blog/create', [BlogController::class, 'blogCreate'])->name('blog.create');
@@ -55,7 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/blog/category/delete/{id}', [BlogController::class, 'blogCategoryDelete'])->name('delete.blog.category');
     Route::post('/category/status/update/{id}', [BlogController::class, 'categoryStatusUpdate'])->name('category.status.update');
     //Description
-    Route::post('/description/edit/{id}', [BackendController::class, 'description'])->name('description');    
+    Route::post('/description/edit/{id}', [BackendController::class, 'description'])->name('description');
 });
 
 Route::middleware('auth')->group(function () {

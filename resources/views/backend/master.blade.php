@@ -8,6 +8,9 @@
   <link rel="shortcut icon" type="image/png" href="{{ asset(settings()->favicon) }}" />
   <link rel="stylesheet" href="{{ asset('assets') }}/css/styles.min.css" />
   <link href="{{ asset('assets') }}/summernote/summernote-bs5.css" rel="stylesheet">
+  {{-- toaster css --}}
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   @stack('css')
 </head>
 
@@ -21,7 +24,7 @@
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
           <a href="{{ route('dashboard') }}" class="text-nowrap logo-img">
-            <img src="{{ asset(settings()->dark_logo) }}" height="40" alt="" />
+            <img src="{{ asset(settings()->logo) }}" height="40" alt="" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
             <i class="ti ti-x fs-8"></i>
@@ -78,14 +81,14 @@
                 <span class="hide-menu">Manage User</span>
               </a>
             </li>
-            {{-- <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ route('our_services') }}" aria-expanded="false">
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('gallery.list') }}" aria-expanded="false">
                 <span>
                   <i class="ti ti-world"></i>
                 </span>
-                <span class="hide-menu">Our Services</span>
+                <span class="hide-menu">Manage Gallery</span>
               </a>
-            </li> --}}
+            </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('settings') }}" aria-expanded="false">
                 <span>
@@ -122,6 +125,7 @@
                 <span class="hide-menu">Our Team</span>
               </a>
             </li> --}}
+
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">BLOG</span>
@@ -168,7 +172,7 @@
             </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">              
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -217,6 +221,61 @@
   <script src="{{ asset('assets') }}/js/dashboard.js"></script>
   <script src="{{ asset('assets') }}/summernote/summernote-bs5.js"></script>
   @stack('script')
+{{-- for toastr --}}
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+      @if (Session::has('message'))
+          var type = "{{ Session::get('alert-type', 'info') }}"
+          switch (type) {
+              case 'info':
+                  toastr.info(" {{ Session::get('message') }} ");
+                  break;
+
+              case 'success':
+                  toastr.success(" {{ Session::get('message') }} ");
+                  break;
+
+              case 'warning':
+                  toastr.warning(" {{ Session::get('message') }} ");
+                  break;
+
+              case 'error':
+                  toastr.error(" {{ Session::get('message') }} ");
+                  break;
+          }
+      @endif
+  </script>
+  {{-- end toastr --}}
+ <!-- SweetAlert2 -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+$(function(){
+    $(document).on('click', '#delete', function(e){
+        e.preventDefault();
+        var link = $(this).attr("href");
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085D6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect AFTER confirmation
+                window.location.href = link;
+            }
+        });
+    });
+});
+</script>
+
 </body>
 
 </html>
