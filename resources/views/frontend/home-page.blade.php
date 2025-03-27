@@ -1,4 +1,14 @@
 @extends('frontend.master')
+@push('css')
+    <style>
+        .bg-opacity-30{
+            --tw-bg-opacity: .3;
+        }
+        .bg-black {
+            background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
+        }
+    </style>
+@endpush
 @section('content')
 @include('frontend.partials.hero-section')
 @include('frontend.partials.latest-updates')

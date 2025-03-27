@@ -1,5 +1,69 @@
 @extends('backend.master')
 @section('contant')
+
+
+<div class="row">
+    <!-- Card 1: Users -->
+    <div class="col-sm-6 col-xl-3">
+      <div class="card text-white bg-primary mb-3 overflow-hidden rounded-2 shadow-sm">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <h6 class="text-white mb-2">Total Users</h6>
+            <h4 class="fw-semibold">{{$users->count()}}</h4>
+          </div>
+          <div class="bg-white bg-opacity-25 rounded-circle p-3">
+            <i class="ti ti-users fs-4 text-white"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: News -->
+    <div class="col-sm-6 col-xl-3">
+      <div class="card text-white bg-success mb-3 overflow-hidden rounded-2 shadow-sm">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <h6 class="text-white mb-2">Total News</h6>
+            <h4 class="fw-semibold">{{$news->count()}}</h4>
+          </div>
+          <div class="bg-white bg-opacity-25 rounded-circle p-3">
+            <i class="ti ti-news fs-4 text-white"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Magazin -->
+    <div class="col-sm-6 col-xl-3">
+      <div class="card text-white bg-warning mb-3 overflow-hidden rounded-2 shadow-sm">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <h6 class="text-white mb-2">Total Magazin</h6>
+            <h4 class="fw-semibold">{{$magazins->count()}}</h4>
+          </div>
+          <div class="bg-white bg-opacity-25 rounded-circle p-3">
+            <i class="ti ti-book fs-4 text-white"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Newsletter -->
+    <div class="col-sm-6 col-xl-3">
+      <div class="card text-white bg-danger mb-3 overflow-hidden rounded-2 shadow-sm">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <h6 class="text-white mb-2">Newsletter</h6>
+            <h4 class="fw-semibold">{{$newsletters->count()}}</h4>
+          </div>
+          <div class="bg-white bg-opacity-25 rounded-circle p-3">
+            <i class="ti ti-mail fs-4 text-white"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--  Row 1 -->
   <div class="row">
     <div class="col-lg-8 d-flex align-items-strech">
@@ -143,7 +207,7 @@
                 <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
                 <span class="timeline-badge-border d-block flex-shrink-0"></span>
               </div>
-              <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New arrival recorded 
+              <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New arrival recorded
               </div>
             </li>
             <li class="timeline-item d-flex position-relative overflow-hidden">
@@ -187,7 +251,7 @@
                   <td class="border-bottom-0"><h6 class="fw-semibold mb-0">1</h6></td>
                   <td class="border-bottom-0">
                       <h6 class="fw-semibold mb-1">Sunil Joshi</h6>
-                      <span class="fw-normal">Web Designer</span>                          
+                      <span class="fw-normal">Web Designer</span>
                   </td>
                   <td class="border-bottom-0">
                     <p class="mb-0 fw-normal">Elite Admin</p>
@@ -200,12 +264,12 @@
                   <td class="border-bottom-0">
                     <h6 class="fw-semibold mb-0 fs-4">$3.9</h6>
                   </td>
-                </tr> 
+                </tr>
                 <tr>
                   <td class="border-bottom-0"><h6 class="fw-semibold mb-0">2</h6></td>
                   <td class="border-bottom-0">
                       <h6 class="fw-semibold mb-1">Andrew McDownland</h6>
-                      <span class="fw-normal">Project Manager</span>                          
+                      <span class="fw-normal">Project Manager</span>
                   </td>
                   <td class="border-bottom-0">
                     <p class="mb-0 fw-normal">Real Homes WP Theme</p>
@@ -218,12 +282,12 @@
                   <td class="border-bottom-0">
                     <h6 class="fw-semibold mb-0 fs-4">$24.5k</h6>
                   </td>
-                </tr> 
+                </tr>
                 <tr>
                   <td class="border-bottom-0"><h6 class="fw-semibold mb-0">3</h6></td>
                   <td class="border-bottom-0">
                       <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                      <span class="fw-normal">Project Manager</span>                          
+                      <span class="fw-normal">Project Manager</span>
                   </td>
                   <td class="border-bottom-0">
                     <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
@@ -236,12 +300,12 @@
                   <td class="border-bottom-0">
                     <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
                   </td>
-                </tr>      
+                </tr>
                 <tr>
                   <td class="border-bottom-0"><h6 class="fw-semibold mb-0">4</h6></td>
                   <td class="border-bottom-0">
                       <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
-                      <span class="fw-normal">Frontend Engineer</span>                          
+                      <span class="fw-normal">Frontend Engineer</span>
                   </td>
                   <td class="border-bottom-0">
                     <p class="mb-0 fw-normal">Hosting Press HTML</p>
@@ -254,7 +318,7 @@
                   <td class="border-bottom-0">
                     <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
                   </td>
-                </tr>                       
+                </tr>
               </tbody>
             </table>
           </div>
@@ -346,5 +410,5 @@
   </div>
   <div class="py-6 px-6 text-center">
     <p class="mb-0 fs-4">Design and Developed by <a href="https://shahadat.42web.io/" target="_blank" class="pe-1 text-primary text-decoration-underline">SHAHADAT.WEB</a> Distributed by <a href="">FAIZA EXPRESS</a></p>
-  </div>  
+  </div>
 @endsection

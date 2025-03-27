@@ -40,7 +40,7 @@ class BackendController extends Controller
         
         $setting = Setting::find(1);
 
-        if ( $request->file('logo')) {
+        if ($request->file('logo')) {
             
             if (is_file(public_path($setting->dark_logo))) {
                 unlink(public_path($setting->dark_logo));
@@ -53,6 +53,8 @@ class BackendController extends Controller
             $img->save(public_path('backend/setting/' . $name));
 
             $setting->logo = 'backend/setting/' . $name ?? null;
+
+            logActivity('Update', 'Changed website logo', 'Site Setting', 1);
         }
 
         if ( $request->file('dark_logo')) {
@@ -104,6 +106,8 @@ class BackendController extends Controller
         $setting->promo_title = $request->promo_title;
         $setting->promo_desp = $request->promo_desp;
         $setting->save();
+
+        logActivity('Update', 'Updated site settings', 'Site Setting', 1);
 
         return back()->with('success', 'Settings updated successfully!');
     }
@@ -267,10 +271,15 @@ class BackendController extends Controller
         $data->title = $request->title;
         $data->description = $request->description;
         $data->save();
-            
-        return back()->with([
-            'content' => ($exists ? "Section Updated Successfully!" : "Section Created Successfully!"),
-        ]);
+
+        logActivity(($exists ? "Updated" : "Created"), "{$request->title} : {$request->description}", 'Section Content', $id);
+         
+        $notification = array(
+            'message' => ($exists ? "Section Updated Successfully!" : "Section Created Successfully!"),
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
     }
     public function userList(){
         $users = User::all();
@@ -302,13 +311,15 @@ class BackendController extends Controller
         }
 
         // Create user
-        User::create([
+        $id = User::insertGetId([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role' => $request->role,
             'image' => $imagePath,
         ]);
+
+        logActivity('Create', "Added a new user: {$request->name} ({$request->email})", 'User', $id);
 
         return back()->with('success' , 'User registered successfully');
     }
@@ -348,6 +359,8 @@ class BackendController extends Controller
         $user->role = $request->role;
         $user->save();
 
+        logActivity('Update', "Updated user profile: {$request->name}", 'User', $id);
+
         return back()->with('success' , 'User Updated successfully');
     }
     public function userDeleteByAdmin($id){
@@ -368,6 +381,8 @@ class BackendController extends Controller
                 unlink(public_path($user->image));
             }
         }
+
+        logActivity('Delete', "Deleted user: {$user->name} ({$user->email}", 'User', $id);
         
         $user->delete();
         return back()->with('success', 'User deleted successfully');

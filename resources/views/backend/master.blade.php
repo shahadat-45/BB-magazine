@@ -49,22 +49,22 @@
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">Frontend Setup</span>
             </li>
-            <li class="sidebar-item">
+            {{-- <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('hero.section') }}" aria-expanded="false">
                 <span>
                   <i class="ti ti-article"></i>
                 </span>
                 <span class="hide-menu">Hero Section</span>
               </a>
-            </li>
-            <li class="sidebar-item">
+            </li> --}}
+            {{-- <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('about.us') }}" aria-expanded="false">
                 <span>
                   <i class="ti ti-alert-circle"></i>
                 </span>
                 <span class="hide-menu">About Us</span>
               </a>
-            </li>
+            </li> --}}
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('newsletter') }}" aria-expanded="false">
                 <span>
@@ -144,6 +144,18 @@
                   <i class="ti ti-edit"></i>
                 </span>
                 <span class="hide-menu">Create Blog</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">LOG</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('activity.log') }}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-brand-blogger"></i>
+                </span>
+                <span class="hide-menu">Activity Log</span>
               </a>
             </li>
           </ul>

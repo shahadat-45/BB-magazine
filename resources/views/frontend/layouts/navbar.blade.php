@@ -154,8 +154,7 @@
                         </div>
                     </div>
 
-                    <a href=""
-                        class="block py-2 px-4 hover:bg-gray-100 text-gray-700">Gallery</a>
+                    <a href="{{ route('frontend.gallery') }}" class="block py-2 px-4 hover:bg-gray-100 text-gray-700">Gallery</a>
 
                     <!-- TV Menu -->
                     <div class="relative">
@@ -385,7 +384,7 @@
                 </div>
             </div>
             <!-- Gallery -->
-            <a href="" class="hover:text-[#D2AB67]">Gallery</a>
+            <a href="{{ route('frontend.gallery') }}" class="hover:text-[#D2AB67]">Gallery</a>
             <!-- Lead Zone -->
             <div class="relative">
                 <button class="hover:text-[#D2AB67] flex items-center lead-zone-desktop-toggle">

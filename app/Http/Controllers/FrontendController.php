@@ -64,27 +64,24 @@ class FrontendController extends Controller
     public function underConstruction(){
         return view('frontend.layouts.under-construction');
     }
-    public function newsletter_store(Request $request){
-
+    public function newsletter_store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
-            'newsletter_email'   => 'required|email|max:255',
-        ],
-        [
+            'newsletter_email' => 'required|email|max:255',
+        ], [
             'newsletter_email.required' => 'Email is required!',
             'newsletter_email.email' => 'Please enter a valid email!',
-        ]
-        );
-
+        ]);
+    
         if ($validator->fails()) {
-            return redirect()->to(url('/#footer'))
-                ->withErrors($validator)
-                ->withInput();
+            return response()->json(['errors' => $validator->errors()], 422);
         }
-
+    
         Emails::create(['email' => $request->newsletter_email]);
-        
-        return redirect()->to(url('/#footer'))->with('footer', 'Subscription successful!');
+    
+        return response()->json(['message' => 'Subscription successful!'], 200);
     }
+    
     public function storeContact(Request $request)
     {
         // Custom validation logic

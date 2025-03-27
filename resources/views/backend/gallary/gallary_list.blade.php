@@ -27,6 +27,39 @@
         </div>
     </div>
 </div>
+
+<!-- Modal 3-->
+<div class="modal fade" id="sectionContentModel" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Update Content</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('description', 3) }}" method="POST" id="heroForm"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control mb-1" id="title"
+                            value="{{ description(3)->title ?? '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" class="form-control mb-1" id="description" cols="30" rows="4">{{ description(3)->description ?? '' }}</textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"
+                    onclick="document.getElementById('heroForm').submit()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal end -->
 @if ($errors->any())
   <div class="row">
@@ -52,9 +85,16 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="card-title fw-semibold ">Gallery List</h5>
-                    <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Add Gallary
-                    </button>
+                    <div>
+                        <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Add Gallary
+                        </button>
+                        
+                        <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-primary"
+                            data-bs-toggle="modal" data-bs-target="#sectionContentModel">
+                            Gallery Section Content
+                        </button>
+                    </div>
                 </div>
         
                 <table id="galleryTable" class="table table-bordered">

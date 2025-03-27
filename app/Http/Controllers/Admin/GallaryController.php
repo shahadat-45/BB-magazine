@@ -70,10 +70,12 @@ class GallaryController extends Controller
             $img->save(public_path('backend/gallary/' . $imageName));  
             $imagePath = 'backend/gallary/' . $imageName; 
         }
-        Gallery::insert([
+        $id = Gallery::insertGetId([
             'gallary_image' => $imagePath,
             'created_at' => Carbon::now(),
         ]);
+
+        logActivity('Create', "Added a new gallery image", 'Gallery', $id);
         
         $notification = array(
             'message' => 'Gallery Image Inserted Successfully',
@@ -90,7 +92,9 @@ class GallaryController extends Controller
 
         unlink($img);
 
-        Gallery::find($id)->delete();
+        logActivity('Delete', "Deleted gallery image", 'Gallery', $id);
+
+        $item->delete();
 
         $notification = array(
             'message' => 'Gallery Image Deleted Successfully',

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutUs;
+use App\Models\BlogCategory;
+use App\Models\Gallery;
 use App\Models\HeroSection;
+use App\Models\News;
 use App\Models\Newsletter;
 use App\Models\Pricing;
 use App\Models\Project;
@@ -15,59 +18,51 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    public function aboutUs(){
-        $setting = Setting::find(1);
-        $about_us = AboutUs::find(1); 
-        $vision = AboutUs::find(2);
-        $mission = AboutUs::find(3);
-        $newsletter = Newsletter::find(1);                 
-        $teams = Team::take(6)->get();
+    public function newsView($slug){
+
+        $category_id = News::where('slug' , $slug)->first();
+
+        $news = News::where('slug', $slug)
+        ->where('status', 1)
+        ->firstOrFail();
+
+        $relatedNews = News::where('category_id', $category_id)
+            ->where('status', 1)
+            ->where('slug', '!=', $slug)
+            ->get(['id', 'title', 'thumnail_image', 'slug', 'short_description']);
         
-        return view('frontend.about' , compact(['about_us', 'newsletter' , 'teams', 'setting', 'vision' , 'mission']));
+        return view('frontend.news-detail' , compact(['news' ,'relatedNews']));
         
     }
-    public function service(){
-        $services = Service::all();
-        return view('frontend.service', compact('services'));
-    }
-    public function serviceDetails($id){
-        $services = Service::all();
-        $service = Service::find($id);
-        return view('frontend.service-details', compact(['service' , 'services']));
-    }
-    public function contact(){
-        return view('frontend.contact');
-    }
-    public function ourTeam(){
-        $teams = Team::take(3)->get();
-        return view('frontend.team', compact('teams'));
-    }
-    public function testimonial(){
-        $testimonials = Testimonial::all();
-        return view('frontend.testimonial', compact('testimonials'));
-    }
-    public function portfolioDetails($id){
-        $portfolio = Project::find($id);
-        return view('frontend.portfolio-details', compact('portfolio'));
-    }
-    public function project(){
-        $projects = Project::all();
-        $projectCategory = Project::selectRaw('category, MAX(id) as id')
-                            ->groupBy('category')                            
-                            ->get();
-        return view('frontend.project' , compact(['projects' , 'projectCategory']));
-    }
-    public function pricing(){
+    public function gallery(){
 
-        $pricing = Pricing::all();
+        $galleryImages = Gallery::all();
 
-        return view('frontend.pricing.pricing' , compact('pricing'));
+        return view('frontend.gallery' , compact('galleryImages'));
     }
-    public function checkout($id){
+    public function allCategories(){
 
-        $data = Pricing::find($id);
+        $articleCategories = BlogCategory::where('status', 1)
+            ->latest()
+            ->get(['id', 'name', 'slug', 'image', 'status']);
 
-        return view('frontend.components.checkout' , compact('data'));
+        return view('frontend.layouts.all-category' , compact('articleCategories'));
     }
+
+    public function category($slug){
+
+        $category = BlogCategory::where('slug', $slug)
+        ->where('status', 1)
+        ->first();
+
+        if ($category) {
+            $categoryNews = News::where('category_id' , $category->id)
+                ->select('id', 'title', 'slug', 'short_description', 'thumnail_image', 'author', 'created_at' , 'date')
+                ->paginate(12);
+        }
+
+        return view('frontend.layouts.category' , compact(['categoryNews' , 'category']));
+    }
+    
 
 }

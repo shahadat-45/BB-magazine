@@ -13,16 +13,23 @@ Route::get('/', [FrontendController::class, 'index'])->name('home');
 Route::post('/newsletter/store', [FrontendController::class, 'newsletter_store'])->name('newsletter.store');
 Route::post('/contact/store', [FrontendController::class, 'storeContact'])->name('contact.store');
 
-//Pages
+//Blogs
 Route::get('/under_construction', [FrontendController::class, 'underConstruction'])->name('under-construction');
 Route::get('/frontend/gallery', [FrontendController::class, 'frontendGallery'])->name('frontend.gallery');
-
-//Blogs
 Route::get('/page/blog', [BlogController::class, 'blog'])->name('page.blog');
-Route::get('/news/view/{slug}', [BlogController::class, 'newsView'])->name('news.view');
+
+//Pages
+Route::get('/news/view/{slug}', [PageController::class, 'newsView'])->name('news.view');
+Route::get('page/gallery', [PageController::class, 'gallery'])->name('frontend.gallery');
+Route::get('/all-categories', [PageController::class, 'allCategories'])->name('all-categories');
+Route::get('/category/{slug}', [PageController::class, 'category'])->name('frontend.category');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    //Activity Log
+    Route::get('/activity-logs', [AdminController::class, 'activityLog'])->name('activity.log');
+    Route::get('/activity-logs/data', [AdminController::class, 'getActivityLogs'])->name('activity.logs.data');
+    Route::delete('/activity-logs/delete/{id}', [AdminController::class, 'delete'])->name('activity.logs.delete');
 
     //settings
     Route::get('/settings', [BackendController::class, 'settings'])->name('settings');
@@ -65,6 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/blog/update/{id}', [BlogController::class, 'blogUpdate'])->name('blog.update');
     Route::get('district-get/ajax/{division_id}',[BlogController::class, 'getDistrictWithAjax']);
     Route::get('state-get/ajax/{district_id}',[BlogController::class, 'getStateWithAjax']);
+    Route::get('/blogs/data', [BlogController::class, 'getData'])->name('blogs.data');
     //category
     Route::post('/blog/category/store', [BlogController::class, 'blogCategoryStore'])->name('blog.category.store');
     Route::get('/blog/category/delete/{id}', [BlogController::class, 'blogCategoryDelete'])->name('delete.blog.category');

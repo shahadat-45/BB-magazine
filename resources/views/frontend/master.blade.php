@@ -4,11 +4,13 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{{ settings()->title }}</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         {{-- <meta property="og:title" content="{{ $news->title }}"> --}}
         {{-- <meta property="og:description" content="{{ $news->short_content }}">
         <meta property="og:image" content="{{ asset($news->thumbPhoto?->path) }}"> --}}
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
+        @stack('meta')
         {{-- <meta property="og:url" content="{{ isset($news) ? url("news/" . $news->slug) : url()->current() }}"> --}}
         <link rel="website icon" type="png" href="{{ asset(settings()->favicon) }}">
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,6 +24,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <!-- Toastr CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        @stack('css')
     </head>
 
     <body class="font-[Figtree] bg-white">
@@ -37,6 +40,7 @@
         <!-- Include SwiperJS Script -->
         <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
         <!-- Hero Script -->
+        @stack('script')
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 var swiper = new Swiper(".mySwiper", {
@@ -262,6 +266,50 @@
                 });
             });
         </script>
+        <script>
+            $(document).ready(function () {
+                $('#footer-newsletter-form').on('submit', function (e) {
+                    e.preventDefault(); // Prevent default form submission
+                    
+                    let email = $('#footer-newsletter-email').val();
+                    let token = "{{ csrf_token() }}"; // CSRF token for Laravel
+        
+                    // Frontend Validation
+                    if (email === '') {
+                        toastr.error('Email is required!');
+                        return;
+                    }
+                    if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) == false) {
+                        toastr.error('Please enter a valid email!');
+                        return;
+                    }
+        
+                    // Send AJAX Request
+                    $.ajax({
+                        url: "{{ route('newsletter.store') }}", // Laravel route
+                        type: "POST",
+                        data: { 
+                            newsletter_email: email, 
+                            _token: token
+                        },
+                        beforeSend: function () {
+                            toastr.info('Processing your request...');
+                        },
+                        success: function (response) {
+                            toastr.success(response.message);
+                            $('#newsletter-email').val(''); // Clear input after success
+                        },
+                        error: function (xhr) {
+                            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                                toastr.error(xhr.responseJSON.errors.newsletter_email[0]);
+                            } else {
+                                toastr.error('Something went wrong. Try again!');
+                            }
+                        }
+                    });
+                });
+            });
+        </script>        
     </body>
 
 </html>

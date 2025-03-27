@@ -48,17 +48,16 @@
             </p>
 
             <!-- Input Field with Button Inside -->
-            <div class="relative mt-3">
-                <input type="email" wire:model="email" placeholder="Email"
-                    class="w-full border text-xs text-gray-500 border-gray-400 px-3 py-2 focus:ring-0 focus:border-gray-400 focus:outline-none" />
-                <button wire:click="subscribe" type="submit"
-                    class="absolute right-1 top-1 bottom-1 font-medium bg-[#D2AB67] text-white px-2.5 text-xs hover:bg-yellow-600 transition-colors duration-500">
-                    SUBSCRIBE
-                </button>
-            </div>
-            @error("email")
-                <span class="text-red-500 text-sm mt-1 flex justify-start">{{ $message }}</span>
-            @enderror
+            <form id="footer-newsletter-form">
+                <div class="relative mt-3">
+                    <input wire:model="email" placeholder="Email" id="footer-newsletter-email"
+                        class="w-full border text-xs text-gray-500 border-gray-400 px-3 py-2 focus:ring-0 focus:border-gray-400 focus:outline-none" />
+                    <button wire:click="subscribe" type="submit"
+                        class="absolute right-1 top-1 bottom-1 font-medium bg-[#D2AB67] text-white px-2.5 text-xs hover:bg-yellow-600 transition-colors duration-500">
+                        SUBSCRIBE
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

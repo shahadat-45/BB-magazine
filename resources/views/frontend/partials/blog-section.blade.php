@@ -61,7 +61,7 @@
 
             <!-- All Articles Link -->
             <div class="pt-5 flex items-center text-sm text-gray-600 font-medium cursor-pointer uppercase">
-                <a href="" class="flex items-center">{{-- {{ route("all-categories") }} --}}
+                <a href="{{ route("all-categories") }}" class="flex items-center">{{--  --}}
                     <span>All Articles</span>
                     <svg class="w-4 h-4 ml-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

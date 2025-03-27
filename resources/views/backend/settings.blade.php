@@ -13,18 +13,18 @@
           <div class="row">
             <div class="col">
               <div class="mb-3">
-                <label for="logo" class="form-label"> White Logo</label>
+                <label for="logo" class="form-label">Logo</label>
                 <input type="file" name="logo" class="form-control" id="logo" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
                 <img style="background-color: dimgrey;" class="mt-2 rounded" height="40px" src="{{ asset($setting->logo ?? '') }}" id="blah">
               </div>
             </div>
-            <div class="col">
+            {{-- <div class="col">
               <div class="mb-3">
                 <label for="dark_logo" class="form-label">Dark Logo</label>
                 <input type="file" name="dark_logo" class="form-control" id="dark_logo" onchange="document.getElementById('blah2').src = window.URL.createObjectURL(this.files[0])">
                 <img class="mt-2 rounded" height="40px" src="{{ asset($setting->dark_logo ?? '') }}" id="blah2">
               </div>
-            </div>
+            </div> --}}
             <div class="col">                  
               <div class="mb-3">
                 <label for="favicon" class="form-label">Favicon</label>
@@ -106,33 +106,7 @@
                 <input type="text" name="map_link" value="{{ $setting->map_link ?? '' }}" class="form-control" id="map_link" placeholder="Google Map Embed link">
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div class="mb-3">
-                <label for="clients" class="form-label">Clients</label>
-                <input type="number" name="clients" value="{{ $setting->clients ?? '' }}" class="form-control" id="clients" placeholder="Number of clients">
-              </div>
-            </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="projects" class="form-label">Projects</label>
-                <input type="number" name="projects" value="{{ $setting->projects ?? '' }}" class="form-control" id="projects" placeholder="Number of projects">
-              </div>
-            </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="support" class="form-label">Hours Of Support</label>
-                <input type="number" name="support" value="{{ $setting->support ?? '' }}" class="form-control" id="support" placeholder="Number of supported hours">
-              </div>
-            </div>
-            <div class="col">
-              <div class="mb-3">
-                <label for="workers" class="form-label">Workers</label>
-                <input type="number" name="workers" value="{{ $setting->workers ?? '' }}" class="form-control" id="workers" placeholder="Number of Workers">
-              </div>
-            </div>
-          </div>
+          </div>          
           <div class="form-text mb-3" id="basic-addon4">Promo section main title & description to update.</div>
           <div class="row">
             <div class="col-12">
