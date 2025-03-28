@@ -16,7 +16,7 @@ class GallaryController extends Controller
     public function galleryList(Request $request)
     {
         if ($request->ajax()) {
-            $galleries = Gallery::select(['id', 'gallary_image', 'created_at', 'status']);
+            $galleries = Gallery::select(['id', 'gallary_image', 'name', 'created_at', 'status']);
 
             return DataTables::of($galleries)
                 ->addIndexColumn()
@@ -33,6 +33,9 @@ class GallaryController extends Controller
                     return '<button class="btn btn-sm p-1 '.$buttonColor.' status-toggle" data-id="' . $row->id . '">
                                 <i style="font-size: 18px;" class="ti ' . $statusIcon . '"></i>
                             </button>
+                            <button class="btn btn-sm p-1 btn-info ms-1 view-image" data-image="'. asset($row->gallary_image) .'">
+                                <i style="font-size: 18px;" class="ti ti-eye"></i>
+                            </button>
                             <a href="'.route('gallery.delete', $row->id).'" title="Delete" id="delete">
                                 <button class="btn btn-sm p-1 btn-danger ms-1"><i style="font-size: 18px;" class="ti ti-trash"></i></button>
                             </a>';
@@ -43,7 +46,6 @@ class GallaryController extends Controller
 
         return view("backend.gallary.gallary_list");
     }
-
     public function toggleStatus(Request $request)
     {
         $gallery = Gallery::find($request->id);
@@ -59,6 +61,7 @@ class GallaryController extends Controller
     public function galleryStore(Request $request)
     {
         $request->validate([
+            'gallary_image_name' => 'required|string|max:100',
             'gallary_image' => 'required|image|mimes:png,jpg,jpeg,gif,webp|max:2048',
         ]);
 
@@ -71,6 +74,7 @@ class GallaryController extends Controller
             $imagePath = 'backend/gallary/' . $imageName; 
         }
         $id = Gallery::insertGetId([
+            'name' => $request->gallary_image_name,
             'gallary_image' => $imagePath,
             'created_at' => Carbon::now(),
         ]);

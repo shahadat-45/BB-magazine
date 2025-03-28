@@ -2,7 +2,7 @@
 @section('contant')
 
 
-<div class="row">
+<div class="row" style="min-height: 80vh">
     <!-- Card 1: Users -->
     <div class="col-sm-6 col-xl-3">
       <div class="card text-white bg-primary mb-3 overflow-hidden rounded-2 shadow-sm">
@@ -65,7 +65,7 @@
   </div>
 
   <!--  Row 1 -->
-  <div class="row">
+  {{-- <div class="row">
     <div class="col-lg-8 d-flex align-items-strech">
       <div class="card w-100">
         <div class="card-body">
@@ -407,8 +407,8 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
   <div class="py-6 px-6 text-center">
-    <p class="mb-0 fs-4">Design and Developed by <a href="https://shahadat.42web.io/" target="_blank" class="pe-1 text-primary text-decoration-underline">SHAHADAT.WEB</a> Distributed by <a href="">FAIZA EXPRESS</a></p>
+    <p class="mb-0 fs-3">Design and Developed by <a href="https://shahadat.42web.io/" target="_blank" class="pe-1 text-primary text-decoration-underline">SHAHADAT.WEB</a> Distributed by <a href="">FAIZA EXPRESS</a></p>
   </div>
 @endsection

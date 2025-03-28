@@ -6,7 +6,7 @@
       @if (session('content'))
         <div class="alert alert-success mb-0" style="width: -webkit-fill-available;">{{ session('content') }}</div>
       @endif
-      <button type="button" style="max-width: fit-content;text-wrap: nowrap;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <button type="button" style="max-width: fit-content;text-wrap: nowrap;" class="btn btn-golden" data-bs-toggle="modal" data-bs-target="#exampleModal">
           Newsletter Section Content
       </button>
   </div>

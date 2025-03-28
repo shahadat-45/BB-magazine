@@ -20,7 +20,7 @@
                     @foreach ($heroSliders as $index => $slider)
                         <span class="ribbon-text {{ $index == 0 ? "" : "hidden" }}">
                             <a href="{{ route("news.view", $slider->slug) }}">{{--  --}}
-                                <span class="hidden md:inline">{{ Str::limit($slider->title, 100) }}</span>
+                                <span class="hidden md:inline">{{ Str::limit($slider->title, 60) }}</span>
                                 <span class="md:hidden">{{ Str::limit($slider->title, 20) }}</span>
                             </a>
                         </span>

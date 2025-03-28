@@ -11,13 +11,15 @@
             <div class="modal-body">
                 <form action="{{ route('gallery.store') }}" method="POST" id="gallaryForm" enctype="multipart/form-data">
                     @csrf
-
                     <div class="mb-3">
-                        <label for="category_img" class="form-label">Gallary Image</label>
-                        <input type="file" name="gallary_image" class="form-control" id="gallary_image" required>
+                        <label for="name" class="form-label">Image Name</label>
+                        <input type="text" name="gallary_image_name" class="form-control" id="name" required placeholder="Short description about image">
                     </div>
 
-
+                    <div class="mb-3">
+                        <label for="gallary_image" class="form-label">Gallary Image</label>
+                        <input type="file" name="gallary_image" class="form-control" id="gallary_image" required>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -27,7 +29,6 @@
         </div>
     </div>
 </div>
-
 <!-- Modal 3-->
 <div class="modal fade" id="sectionContentModel" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -60,6 +61,20 @@
         </div>
     </div>
 </div>
+<!-- Modal for Image Preview -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="previewImage" src="" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal end -->
 @if ($errors->any())
   <div class="row">
@@ -86,11 +101,11 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="card-title fw-semibold ">Gallery List</h5>
                     <div>
-                        <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-golden me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Add Gallary
                         </button>
                         
-                        <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-primary"
+                        <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-golden"
                             data-bs-toggle="modal" data-bs-target="#sectionContentModel">
                             Gallery Section Content
                         </button>
@@ -102,6 +117,7 @@
                         <tr>
                             <th>Sl</th>
                             <th>Image</th>
+                            <th>Name</th>
                             <th>Created at</th>
                             <th>Action</th>
                         </tr>
@@ -116,6 +132,7 @@
 @endsection
 @push('script')
 <!-- DataTables JS -->
+
 <script>
     $(document).ready(function() {
         let table = $('#galleryTable').DataTable({
@@ -125,6 +142,7 @@
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'gallary_image', name: 'gallary_image', orderable: false, searchable: false },
+                { data: 'name', name: 'name' },
                 { data: 'created_at', name: 'created_at' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ]
@@ -150,6 +168,13 @@
                     }
                 }
             });
+        });
+
+        // Handle View Image Click
+        $(document).on('click', '.view-image', function() {
+            let imageUrl = $(this).data('image');
+            $('#previewImage').attr('src', imageUrl);
+            $('#imageModal').modal('show');
         });
     });
 </script>

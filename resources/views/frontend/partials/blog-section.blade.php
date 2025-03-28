@@ -102,11 +102,13 @@
                 <div class="swiper-wrapper">
                     @foreach ($magazines as $magazine)
                         <div class="swiper-slide">
-                            <div class="bg-white border shadow-lg overflow-hidden group">
-                                <img src="{{ asset($magazine->thumnail_image) }}"
+                            <a href="{{ route("news.view", $magazine->slug) }}">
+                                <div class="bg-white border shadow-lg overflow-hidden group">
+                                    <img src="{{ asset($magazine->thumnail_image) }}"
                                     class="w-full h-[400px] object-cover transition duration-700 ease-in-out group-hover:scale-110"
                                     alt="Magazine" />
-                            </div>
+                                </div>
+                            </a>
                         </div>
                     @endforeach
                 </div>

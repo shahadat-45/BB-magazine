@@ -30,7 +30,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/activity-logs', [AdminController::class, 'activityLog'])->name('activity.log');
     Route::get('/activity-logs/data', [AdminController::class, 'getActivityLogs'])->name('activity.logs.data');
     Route::delete('/activity-logs/delete/{id}', [AdminController::class, 'delete'])->name('activity.logs.delete');
-
+    Route::get('/trash', [AdminController::class, 'trash'])->name('trash');
+    Route::get('/blogs/trashed/data', [AdminController::class, 'getTrashedData'])->name('blogs.trashed.data');
+    Route::get('/blogs/restore/{id}', [AdminController::class, 'restoreNews'])->name('blogs.restore');
+    Route::get('/blogs/force-delete/{id}', [AdminController::class, 'forceDeleteNews'])->name('blogs.force.delete');
     //settings
     Route::get('/settings', [BackendController::class, 'settings'])->name('settings');
     Route::post('/setting/update', [BackendController::class, 'update'])->name('settings.update');

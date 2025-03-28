@@ -1,3 +1,42 @@
+<style>
+    @keyframes modalFadeIn {
+        from {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes modalFadeOut {
+        from {
+            transform: scale(1);
+            opacity: 1;
+        }
+        to {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+    }
+
+    #galleryModal {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    #galleryModal.modal-active {
+        display: flex !important;
+        opacity: 1;
+        animation: modalFadeIn 0.3s ease-out forwards;
+    }
+
+    #galleryModal.modal-hidden {
+        animation: modalFadeOut 0.3s ease-out forwards;
+    }
+</style>
 <div x-data="galleryModal()" class="max-w-6xl mx-auto mt-20 px-7 lg:px-0">
     <div class="border-t border-gray-400 pt-8">
         {{-- @foreach ($gallerySections as $gallerySection) --}}
@@ -21,7 +60,7 @@
                     $colSpan = in_array($index, [1, 3]) ? "md:col-span-2" : "md:col-span-5";
                 @endphp
                 <div class="col-span-1 {{ $colSpan }} overflow-hidden group cursor-pointer"
-                    @click="openModal({{ $index }})">
+                     onclick="openModal({{ $index }})">
                     <img src="{{ asset($gallery->gallary_image) }}" alt=""
                         class="w-full h-[300px] object-cover transition duration-700 ease-in-out group-hover:scale-110" />
                 </div>
@@ -31,11 +70,10 @@
     </div>
 
     <!-- Modal -->
-    <div x-show="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50"
-        x-transition.opacity @keydown.window.escape="closeModal()" @click.away="closeModal()" style="display: none">
+    <div id="galleryModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50" onclick="closeModal()" style="display: none">
         <div class="relative w-full max-w-4xl mx-auto">
             <!-- Close Button -->
-            <button @click="closeModal()" class="absolute top-3 right-6 text-white">
+            <button onclick="closeModal()" class="absolute top-3 right-6 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -45,8 +83,8 @@
 
             <!-- Image Display -->
             <div class="flex items-center justify-center">
-                <!-- ◀️ Previous Button -->
-                <button @click="prevImage()"
+                <!-- Previous Button -->
+                <button onclick="prevImage(event)"
                     class="absolute left-4 text-white p-2 bg-gray-800 bg-opacity-50 rounded-full hover:bg-opacity-75">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -55,11 +93,11 @@
                 </button>
 
                 <!-- Image -->
-                <img :src="images[currentIndex]" alt="Gallery Image"
+                <img id="modalImage" src="" alt="Gallery Image"
                     class="w-full max-h-[80vh] object-contain mx-auto rounded-lg">
 
-                <!-- ▶️ Next Button -->
-                <button @click="nextImage()"
+                <!-- Next Button -->
+                <button onclick="nextImage(event)"
                     class="absolute right-4 text-white p-2 bg-gray-800 bg-opacity-50 rounded-full hover:bg-opacity-75">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -72,30 +110,83 @@
 </div>
 
 <script>
-    function galleryModal() {
-        return {
-            isOpen: false,
-            currentIndex: 0,
-            images: @json($galleryImages->map(fn($img) => asset($img->gallary_image))),
+    const galleryImages = @json($galleryImages->map(fn($img) => asset($img->gallary_image)));
+    let currentIndex = 0;
+    const modal = document.getElementById('galleryModal');
+    const modalImage = document.getElementById('modalImage');
+    let isAnimating = false;
 
-            openModal(index) {
-                this.currentIndex = index;
-                this.isOpen = true;
-                document.body.style.overflow = 'hidden';
-            },
+    function openModal(index) {
+        if (modal.style.display === 'flex' || isAnimating) return;
 
-            closeModal() {
-                this.isOpen = false;
-                document.body.style.overflow = 'auto';
-            },
-
-            nextImage() {
-                this.currentIndex = (this.currentIndex + 1) % this.images.length;
-            },
-
-            prevImage() {
-                this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
-            }
-        };
+        currentIndex = index;
+        modalImage.src = galleryImages[currentIndex];
+        modal.style.display = 'flex';
+        
+        // Force reflow before adding active class
+        void modal.offsetHeight;
+        
+        modal.classList.remove('modal-hidden');
+        modal.classList.add('modal-active');
+        document.body.style.overflow = 'hidden';
     }
+
+    function closeModal() {
+        if (modal.style.display !== 'flex' || isAnimating) return;
+
+        isAnimating = true;
+        modal.classList.remove('modal-active');
+        modal.classList.add('modal-hidden');
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.classList.remove('modal-hidden');
+            document.body.style.overflow = 'auto';
+            isAnimating = false;
+        }, 300);
+    }
+
+    function nextImage(e) {
+        if (e) e.stopPropagation();
+        currentIndex = (currentIndex + 1) % galleryImages.length;
+        updateImage();
+    }
+
+    function prevImage(e) {
+        if (e) e.stopPropagation();
+        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        updateImage();
+    }
+
+    function updateImage() {
+        // Add fade effect for image change
+        modalImage.style.opacity = '0';
+        setTimeout(() => {
+            modalImage.src = galleryImages[currentIndex];
+            modalImage.style.opacity = '1';
+        }, 150);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (modal.style.display !== 'flex') return;
+        
+        if (e.key === 'Escape') {
+            closeModal();
+        } else if (e.key === 'ArrowRight') {
+            nextImage(e);
+        } else if (e.key === 'ArrowLeft') {
+            prevImage(e);
+        }
+    });
+
+    // Prevent modal content from closing when clicking inside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Image transition setup
+    modalImage.style.transition = 'opacity 0.2s ease';
 </script>

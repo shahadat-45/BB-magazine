@@ -6,13 +6,13 @@
                 USEFUL LINKS
             </h3>
             <ul class="space-y-2">
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">About Us</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Topics</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Vision</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Advertisement</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Newsletter</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Privacy Policy</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Sitemap</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">About Us</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Topics</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Vision</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Advertisement</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Newsletter</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Privacy Policy</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Sitemap</a></li>
             </ul>
         </div>
 
@@ -31,10 +31,10 @@
                 HELP & SUPPORT
             </h3>
             <ul class="space-y-2">
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Support</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">FAQs</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Republishing</a></li>
-                <li><a href="{{ route("under-construction") }}" class="hover:underline">Contact Us</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Support</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">FAQs</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Republishing</a></li>
+                <li><a href="{{ route("under-construction") }}" class="hover:underline hover:text-yellow-600">Contact Us</a></li>
             </ul>
         </div>
 

@@ -37,13 +37,35 @@ class BackendController extends Controller
     }
     public function update(Request $request)
     {
-        
+        $request->validate([
+            'logo'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'favicon'   => 'nullable|image|mimes:jpeg,png,jpg,webp|max:100',
+            'title'     => 'required|string|max:60',
+            'address'   => 'nullable|string|max:100',
+            'phone'     => ['nullable', 'regex:/^(?:\+88|88)?(01[3-9]\d{8})$/'],
+            'whats_app' => ['nullable', 'regex:/^(?:\+88|88)?(01[3-9]\d{8})$/'],
+            'email'     => 'required|email|max:255',
+            'facebook'  => 'nullable|url',
+            'twitter'   => 'nullable|url',
+            'youtube'   => 'nullable|url',
+            'instagram' => 'nullable|url',
+            'linkedin'  => 'nullable|url',
+            'map_link'  => 'nullable|url',
+            'promo_title' => 'nullable|string|max:255',
+            'promo_desp'  => 'nullable|string|max:1000',
+        ], [
+            'phone.regex' => 'The phone number must be a valid Bangladeshi number (e.g., 017XXXXXXXX).',
+            'whats_app.regex' => 'The WhatsApp number must be a valid Bangladeshi number (e.g., 017XXXXXXXX).',
+            'email.email' => 'Please enter a valid email address.',
+            'logo.image' => 'The logo must be an image file.',
+            'favicon.image' => 'The favicon must be an image file.',
+        ]);
+
         $setting = Setting::find(1);
 
         if ($request->file('logo')) {
-            
-            if (is_file(public_path($setting->dark_logo))) {
-                unlink(public_path($setting->dark_logo));
+            if (is_file(public_path($setting->logo))) {
+                unlink(public_path($setting->logo));
             }
 
             $image = $request->file('logo');  
@@ -52,30 +74,12 @@ class BackendController extends Controller
             $img = $manager->read($image);
             $img->save(public_path('backend/setting/' . $name));
 
-            $setting->logo = 'backend/setting/' . $name ?? null;
-
-            logActivity('Update', 'Changed website logo', 'Site Setting', 1);
+            $setting->logo = 'backend/setting/' . $name;
         }
 
-        if ( $request->file('dark_logo')) {
-            
-            if (is_file(public_path($setting->dark_logo))) {
-                unlink(public_path($setting->dark_logo));
-            }
-
-            $image = $request->file('dark_logo');  
-            $manager = new ImageManager(new Driver());
-            $name = 'dark_logo_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
-            $img = $manager->read($image);
-            $img->save(public_path('backend/setting/' . $name));
-
-            $setting->dark_logo = 'backend/setting/' . $name ?? null;
-        }
-
-        if ( $request->file('favicon')) {
-            
-            if (is_file(public_path($setting->dark_logo))) {
-                unlink(public_path($setting->dark_logo));
+        if ($request->file('favicon')) {
+            if (is_file(public_path($setting->favicon))) {
+                unlink(public_path($setting->favicon));
             }
 
             $image = $request->file('favicon');  
@@ -84,7 +88,7 @@ class BackendController extends Controller
             $img = $manager->read($image);
             $img->save(public_path('backend/setting/' . $name));
 
-            $setting->favicon = 'backend/setting/' . $name ?? null;
+            $setting->favicon = 'backend/setting/' . $name;
         }        
 
         $setting->title         = $request->title;
@@ -96,21 +100,18 @@ class BackendController extends Controller
         $setting->youtube       = $request->youtube;
         $setting->instagram     = $request->instagram;
         $setting->linkedin      = $request->linkedin;
-        $setting->map_link      = $request->map_link;
-        $setting->projects      = $request->projects;
-        $setting->clients       = $request->clients;
-        $setting->support       = $request->support;
-        $setting->workers       = $request->workers;
+        $setting->map_link      = $request->map_link;        
         $setting->whats_app     = $request->whats_app;
-        
-        $setting->promo_title = $request->promo_title;
-        $setting->promo_desp = $request->promo_desp;
+        $setting->promo_title   = $request->promo_title;
+        $setting->promo_desp    = $request->promo_desp;
+
         $setting->save();
 
         logActivity('Update', 'Updated site settings', 'Site Setting', 1);
 
         return back()->with('success', 'Settings updated successfully!');
     }
+
     public function heroSection(){
         $data = HeroSection::find(1);
         return view('backend.hero_section', compact('data'));

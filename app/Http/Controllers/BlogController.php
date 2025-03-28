@@ -63,14 +63,7 @@ class BlogController extends Controller
 
     public function blogDelete($id)
     {
-        $item = News::find($id);
-
-        if (file_exists(public_path($item->thumnail_image))) {
-            unlink(public_path($item->thumnail_image));
-        }
-        if (file_exists(public_path($item->featured_image))) {
-            unlink(public_path($item->featured_image));
-        }
+        $item = News::find($id);        
 
         logActivity('Delete', "Deleted the news article: {$item->title}", 'News', $id);
         
@@ -210,6 +203,8 @@ class BlogController extends Controller
     {
         $blog = BlogCategory::find($id);
 
+        News::where('category_id', $id)->update(['category_id' => 0]);
+
         if ($blog->image) {
             if (file_exists(public_path($blog->image))) {
                 unlink(public_path($blog->image));
@@ -302,41 +297,41 @@ class BlogController extends Controller
     }
 
     public function getData()
-{
-    $blogs = News::with('category'); // eager load category
+    {
+        $blogs = News::with('category'); // eager load category
 
-    return DataTables::of($blogs)
-        ->addIndexColumn()
-        ->addColumn('category', function ($blog) {
-            return $blog->category->name ?? 'N/A';
-        })
-        ->addColumn('featured_image', function ($blog) {
-            return '<img src="' . asset($blog->featured_image) . '" width="60" height="60" class="rounded" />';
-        })
-        ->addColumn('thumnail_image', function ($blog) {
-            return '<img src="' . asset($blog->thumnail_image) . '" width="60" height="60" class="rounded" />';
-        })
-        ->addColumn('status', function ($blog) {
-            return $blog->status == 1
-                ? '<span class="badge bg-success">Active</span>'
-                : '<span class="badge bg-danger">Inactive</span>';
-        })
-        ->addColumn('action', function ($blog) {
-            $edit = route('edit.blog', $blog->id);
-            $delete = route('delete.blog', $blog->id);
+        return DataTables::of($blogs)
+            ->addIndexColumn()
+            ->addColumn('category', function ($blog) {
+                return $blog->category->name ?? 'N/A';
+            })
+            ->addColumn('featured_image', function ($blog) {
+                return '<img src="' . asset($blog->featured_image) . '" width="60" height="60" class="rounded" />';
+            })
+            ->addColumn('thumnail_image', function ($blog) {
+                return '<img src="' . asset($blog->thumnail_image) . '" width="60" height="60" class="rounded" />';
+            })
+            ->addColumn('status', function ($blog) {
+                return $blog->status == 1
+                    ? '<span class="badge bg-golden">Active</span>'
+                    : '<span class="badge bg-danger">Inactive</span>';
+            })
+            ->addColumn('action', function ($blog) {
+                $edit = route('edit.blog', $blog->id);
+                $delete = route('delete.blog', $blog->id);
 
-            return '
-            <div class="d-flex gap-2">
-                <a href="' . $edit . '" class="btn btn-sm btn-success" title="Edit">
-                    <i class="ti ti-edit"></i>
-                </a>
-                <a href="' . $delete . '" class="btn btn-sm btn-danger" title="Delete" id="delete">
-                    <i class="ti ti-trash"></i>
-                </a>
-            </div>
-        ';
-        })
-        ->rawColumns(['featured_image', 'thumnail_image', 'status', 'action']) // important!
-        ->make(true);
-}
+                return '
+                <div class="d-flex gap-2">
+                    <a href="' . $edit . '" class="btn btn-sm btn-success" title="Edit">
+                        <i class="ti ti-edit"></i>
+                    </a>
+                    <a href="' . $delete . '" class="btn btn-sm btn-danger" title="Delete" id="delete">
+                        <i class="ti ti-trash"></i>
+                    </a>
+                </div>
+            ';
+            })
+            ->rawColumns(['featured_image', 'thumnail_image', 'status', 'action']) // important!
+            ->make(true);
+    }
 }

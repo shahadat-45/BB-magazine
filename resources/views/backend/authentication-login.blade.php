@@ -21,7 +21,7 @@
             <div class="card mb-0">
               <div class="card-body">
                 <a href="{{ route('home') }}" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                  <img style="background-color: black;" src="{{ asset(settings()->logo) }}" width="180" alt="">
+                  <img style="" src="{{ asset(settings()->logo) }}" width="180" alt="">
                 </a>
                 <p class="text-center">Enter Your Login Details</p>
                 <form method="POST" action="{{ route('login') }}">
@@ -43,9 +43,9 @@
                         Remeber this Device
                       </label>
                     </div>
-                    <a class="text-primary fw-bold" href="{{ route('password.request') }}">Forgot Password ?</a>
+                    <a class="text-golder fw-bold" href="{{ route('password.request') }}">Forgot Password ?</a>
                   </div>
-                  <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign In</button>
+                  <button type="submit" class="btn btn-golden w-100 py-8 fs-4 mb-4 rounded-2">Sign In</button>
                 </form>
               </div>
             </div>

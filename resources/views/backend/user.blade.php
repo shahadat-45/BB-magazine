@@ -6,7 +6,7 @@
           <div class="alert alert-success mb-0" style="width: -webkit-fill-available;">{{ session('content') }}</div>
         @endif
         <!-- Button trigger modal -->
-        <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userRegistrationModal">
+        <button type="button" style="max-width: fit-content; text-wrap: nowrap;" class="btn btn-golden" data-bs-toggle="modal" data-bs-target="#userRegistrationModal">
             Add User
         </button>
     </div>

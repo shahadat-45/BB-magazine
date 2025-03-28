@@ -1,5 +1,4 @@
 @extends('frontend.master')
-
 @push('meta')
     <meta property="og:title" content="{{ $news->title }}" />
     <meta property="og:url" content="{{ Request::fullUrl() }}" />
@@ -7,7 +6,16 @@
     <meta property="og:description" content="{{ $news->short_content }}" />
     <meta property="og:site_name" content="BB Magazine" />
 @endpush
-
+@push('css')
+    <style>
+        .bg-opacity-30{
+            --tw-bg-opacity: .3;
+        }
+        .bg-black {
+            background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
+        }
+    </style>
+@endpush
 @section('content')
  <div>
     <!-- News Section -->
@@ -41,10 +49,18 @@
         </div>
         <!-- Icon -->
         <div class="mt-2 mb-7 flex items-center justify-between">
-            <p class="font-bold text-gray-900">
-                Date
-                <span class="ml-1 font-medium text-gray-500">{{ $news->date }}</span>
-            </p>
+            <div>
+                <p class="font-bold text-gray-900">
+                    Date
+                    <span class="ml-1 font-medium text-gray-500">{{ $news->date }}</span>
+                </p>
+                <p class="font-bold text-gray-900 mt-2">
+                    Location
+                    <span class="ml-1 font-medium text-gray-500">
+                        {{ implode(', ', array_filter([$news->division->division_name ?? null, $news->district->district_name ?? null, $news->state->state_name ?? null])) }}
+                    </span>                
+                </p>
+            </div>
             <!-- Icons -->
             <div class="flex items-center space-x-4">
                 <!-- Share Icon -->
@@ -193,7 +209,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 @foreach ($relatedNews as $news)
                     <div class="relative overflow-hidden bg-white shadow group">
-                        <a href="{{ route("news-detail", $news->slug) }}">
+                        <a href="{{ route("news.view", $news->slug) }}">
                             <img src="{{ asset($news->thumnail_image) }}" alt="{{ $news->title }}"
                                 class="w-full h-48 object-cover transition duration-1000 ease-in-out group-hover:scale-125" />
                             <div class="bg-opacity-30 absolute inset-0 flex items-end bg-black p-4">
@@ -208,7 +224,6 @@
             </div>
         </div>
     </div>
-
 
 </div>   
 @endsection

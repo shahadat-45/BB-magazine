@@ -148,7 +148,7 @@
             </li>
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">LOG</span>
+              <span class="hide-menu">Others</span>
             </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('activity.log') }}" aria-expanded="false">
@@ -156,6 +156,14 @@
                   <i class="ti ti-brand-blogger"></i>
                 </span>
                 <span class="hide-menu">Activity Log</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('trash') }}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-trash"></i>
+                </span>
+                <span class="hide-menu">Trash</span>
               </a>
             </li>
           </ul>
