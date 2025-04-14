@@ -158,7 +158,7 @@
                             <label for="thumnail_image" class="form-label">Thumbnail Image</label>
                             <input type="file" name="thumnail_image"
                                 class="form-control @error('thumnail_image') is-invalid @enderror" id="thumnail_image"
-                                onchange="document.getElementById('blah2').src = window.URL.createObjectURL(this.files[0])">
+                                onchange="document.getElementById('blah2').src = window.URL.createObjectURL(this.files[0])" accept=".png, .jpeg, .jpg, .gif, .webp">
                             @error('thumnail_image')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -171,7 +171,7 @@
                             <label for="featured_image" class="form-label">Featured Image</label>
                             <input type="file" name="featured_image"
                                 class="form-control @error('featured_image') is-invalid @enderror" id="featured_image"
-                                onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+                                onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])" accept=".png, .jpeg, .jpg, .gif, .webp">
                             @error('featured_image')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -179,9 +179,22 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="mb-2 d-flex gap-2">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="radio" role="switch" name="featured" id="flexSwitchCheckDefault" value="featured" {{ $item->featured == 'featured' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Is Featured</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="radio" role="switch" name="featured" id="flexSwitchCheckChecked" value="pinned" {{ $item->featured == 'pinned' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Is Pinned</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="radio" role="switch" name="featured" id="flexSwitchCheckDisabled" value="editorial" {{ $item->featured == 'editorial' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="flexSwitchCheckDisabled">Is Editorial</label>
+                    </div>
+                </div>
                 <!-- Status Toggle -->
-                <div class="container mb-2">
+                <div class="mb-2">
                     <label class="form-check form-switch">
                         <input name="status" class="form-check-input" value="1" type="checkbox" id="toggleButton"
                             {{ $item->status == 1 ? 'checked' : '' }}>
@@ -216,6 +229,7 @@
                         $('select[name="state_id"]').empty();
                         $('select[name="district_id"]').empty();
                         $('select[name="state_id"]').append('<option value="" selected disabled>Choose one</option>');
+                        $('select[name="district_id"]').append('<option value="" selected disabled>Choose one</option>');
 
                         $.each(data, function (key, value) {
                             $('select[name="district_id"]').append('<option value="' + value.id + '">' + value.district_name + '</option>');

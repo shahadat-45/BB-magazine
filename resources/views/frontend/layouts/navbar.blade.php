@@ -209,14 +209,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-                <div class="submenuOne absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[1050px] bg-[#E5CD8F] shadow-lg border border-[#E5CD8F] z-50" style="display: none">
-                    <div class="w-1/3 hidden items-center justify-center border-r border-[#fae3a9]">
+                <div class="submenuOne absolute flex top-full left-1/2 -translate-x-1/2 mt-3 w-[1050px] bg-[#E5CD8F] shadow-lg border border-[#E5CD8F] z-50" style="display: none">
+                    <div class="w-1/3 flex items-center justify-center border-r border-[#fae3a9]">
                         <div class="text-center">
                             <img src="{{ asset(settings()->logo) }}" alt="{{ settings()->logo }}"
                                 class="mx-auto h-20">
                         </div>
                     </div>
-                    <div class="grid grid-cols-5 gap-3 p-5">
+                    <div class="grid grid-cols-3 gap-3 p-5">
                         <!-- Brand of the Month -->
                         <div class="relative">
                             <button class="flex items-center justify-center w-full py-2 px-4 bg-[#D0B46A] border border-[#b69030] text-black text-sm hover:text-red-600 transition-colors duration-500 ease-in-out brand-desktop-toggle">

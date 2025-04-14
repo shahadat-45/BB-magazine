@@ -21,7 +21,7 @@ class GallaryController extends Controller
             return DataTables::of($galleries)
                 ->addIndexColumn()
                 ->editColumn('gallary_image', function ($row) {
-                    return '<img class="rounded" src="' . asset($row->gallary_image) . '" height="60px" width="60px">';
+                    return '<img class="rounded" src="' . ($row->gallary_image ? asset($row->gallary_image) : asset('assets/images/no_image.jpg')) . '" height="60px" width="60px">';
                 })
                 ->editColumn('created_at', function ($row) {
                     return \Carbon\Carbon::parse($row->created_at)->timezone('Asia/Dhaka')->format('d M Y h:i A');
@@ -33,7 +33,7 @@ class GallaryController extends Controller
                     return '<button class="btn btn-sm p-1 '.$buttonColor.' status-toggle" data-id="' . $row->id . '">
                                 <i style="font-size: 18px;" class="ti ' . $statusIcon . '"></i>
                             </button>
-                            <button class="btn btn-sm p-1 btn-info ms-1 view-image" data-image="'. asset($row->gallary_image) .'">
+                            <button class="btn btn-sm p-1 btn-info ms-1 view-image" data-image="'. ($row->gallary_image ? asset($row->gallary_image) : asset('assets/images/no_image.jpg')) .'">
                                 <i style="font-size: 18px;" class="ti ti-eye"></i>
                             </button>
                             <a href="'.route('gallery.delete', $row->id).'" title="Delete" id="delete">

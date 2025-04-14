@@ -11,6 +11,23 @@
       </button>
   </div>
 </div>
+@if ($errors->any())
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="alert alert-danger mb-0">
+                <ul class="ms-3">
+                    @foreach ($errors->all() as $error)
+                        <li style="list-style: disc;">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+@endif
 <div class="row">
     <div class="col-sm-12">
       <div class="card">

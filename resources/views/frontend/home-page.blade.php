@@ -4,6 +4,9 @@
         .bg-opacity-30{
             --tw-bg-opacity: .3;
         }
+        .bg-opacity-50{
+            --tw-bg-opacity: .5;
+        }
         .bg-black {
             background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
         }

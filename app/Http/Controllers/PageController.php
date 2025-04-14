@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogCategory;
 use App\Models\Gallery;
+use App\Models\Magazine;
 use App\Models\News;
 
 class PageController extends Controller
 {
     public function newsView($slug){
 
-        $news = News::where('slug', $slug)
-        ->where('status', 1)
-        ->firstOrFail();
+        $news = News::where('slug', $slug)->where('status', 1)->firstOrFail();
+        $news->read_count = $news->read_count + 1;
+        $news->save();
 
         $relatedNews = News::where('category_id', $news->category_id)
             ->where('status', 1)
@@ -20,6 +21,17 @@ class PageController extends Controller
             ->get(['id', 'title', 'thumnail_image', 'slug', 'short_description']);
         
         return view('frontend.news-detail' , compact(['news' ,'relatedNews']));
+        
+    }
+    public function magazineView($slug){
+
+        $magazine = Magazine::where('slug', $slug)->where('status', 1)->firstOrFail();
+        $magazine->read_count = $magazine->read_count + 1;
+        $magazine->save();
+
+        $relatedNews = News::where('status', 1)->latest()->take(4)->get();
+        
+        return view('frontend.magazine' , compact(['magazine' ,'relatedNews']));
         
     }
     public function gallery(){

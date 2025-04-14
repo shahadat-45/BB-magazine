@@ -2,36 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AboutUs;
-use App\Models\Blog;
 use App\Models\BlogCategory;
-use App\Models\Brand;
 use App\Models\Contact;
-use App\Models\Description;
 use App\Models\Emails;
-use App\Models\Feature;
 use App\Models\Gallery;
-use App\Models\HeroSection;
+use App\Models\Magazine;
 use App\Models\News;
-use App\Models\Newsletter;
-use App\Models\Pricing;
-use App\Models\Project;
-use App\Models\Service;
-use App\Models\Setting;
-use App\Models\Team;
-use App\Models\Testimonial;
 use Carbon\Carbon;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class FrontendController extends Controller
 {
     public function index(Request $request){
         $heroSliders = News::select('title', 'slug', 'thumnail_image', 'short_description')
             ->where('status', 1)
+            ->where('featured' , 'featured')
             ->latest()
             ->take(4)
             ->get();
@@ -41,23 +27,36 @@ class FrontendController extends Controller
             ->get(['id', 'title', 'slug']);
         $latestNews = News::select('id', 'title', 'slug', 'thumnail_image')
             ->where('status', 1)
+            ->where('type' , 'news')
             ->take(6)
+            ->latest()
             ->get();
-        $dates = News::select('date')->get()->map(function ($news) {
-                return Carbon::parse($news->date)->format('M, Y');
-            })->toArray();
-        $magazines = News::where('type' , 'magazine')->latest()->take(4)->get();    
+
+        // $magazines = Magazine::where('status', 1)->take(4)->get();
+        $magazines = Magazine::where('status', 1)
+            ->orderByRaw('YEAR(date) DESC, MONTH(date) DESC')
+            ->latest()
+            ->take(4)
+            ->get();
+            
+        $dates = $magazines->map(function ($magazine) {
+            return Carbon::parse($magazine->date)->format('M, Y');
+        })->toArray();
+
         $popularNews = News::select('id', 'title', 'slug', 'author', 'read_count')
             ->where('status', 1)
             ->orderBy('read_count', 'desc')
             ->take(4)
             ->get();
+
         $articleCategories = BlogCategory::where('status', 1)
             ->latest()
             ->take(4)
             ->get();
+
         $galleryImages = Gallery::latest()
             ->take(6)
+            ->latest()
             ->get();
         return view('frontend.home-page' , compact(['heroSliders' , 'latestUpdates' , 'latestNews' , 'dates' , 'magazines' , 'popularNews' , 'articleCategories' , 'galleryImages']));
     }

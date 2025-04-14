@@ -24,30 +24,35 @@
           <form action="{{ route('user.registerByAdmin') }}" method="POST" id="userRegistrationForm" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
-              <label for="name" class="form-label">Name</label>
-              <input type="text" name="name" class="form-control" id="name" placeholder="Enter your name" required>
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" id="name" value="{{ old('name') }}" placeholder="Enter your name" required>
+                @error('name') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" id="email" value="{{ old('email') }}" placeholder="Enter your email" required>
+                @error('email') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" name="password" class="form-control" id="password" placeholder="Enter password" required>
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Enter password" required>
+                @error('password') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="mb-3">
-              <label for="role" class="form-label">Role</label>
-              <select name="role" class="form-control" id="role" required>
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="user">User</option>
-              </select>
+                <label for="role" class="form-label">Role</label>
+                <select name="role" class="form-control" id="role" required>
+                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="editor" {{ old('role') == 'editor' ? 'selected' : '' }}>Editor</option>
+                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
+                </select>
+                @error('role') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
             <div class="mb-3">
-              <label for="user_img" class="form-label">Profile Image</label>
-              <input type="file" name="image" class="form-control" id="user_img" required>
+                <label for="user_img" class="form-label">Profile Image</label>
+                <input type="file" name="image" class="form-control" id="user_img" accept=".png, .jpeg, .jpg, .gif, .webp">
+                @error('image') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
-          </form>
+          </form>        
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -86,7 +91,7 @@
                         </div>
                         <div>
                             <label for="user_img" class="form-label">Profile Image</label>
-                            <input type="file" name="image" class="form-control" id="user_img" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+                            <input type="file" name="image" class="form-control" id="user_img" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"  accept=".png, .jpeg, .jpg, .gif, .webp">
                             <img class="mt-2" src="{{ asset($user->image) }}" width="50px" id="blah">
                         </div>
                     </form>
@@ -156,11 +161,7 @@
                         @foreach ($users as $i => $user)
                             <tr style="vertical-align: middle;">
                                 <th>
-                                    @if ($user->image)
-                                        <img src="{{ asset($user->image) }}" width="50px" height="50px" style="border-radius: 50%; object-fit: cover">    
-                                    @else
-                                        <img src="{{ asset('assets/images/profile/default-profile-picture.webp') }}" width="50px" height="50px" style="border-radius: 50%; object-fit: cover">
-                                    @endif
+                                    <img src="{{ $user->image ? asset($user->image) : asset('assets/images/no_image.jpg') }}" width="50px" height="50px" style="border-radius: 50%; object-fit: cover">
                                 </th>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>

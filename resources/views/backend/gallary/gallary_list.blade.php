@@ -13,12 +13,12 @@
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Image Name</label>
-                        <input type="text" name="gallary_image_name" class="form-control" id="name" required placeholder="Short description about image">
+                        <input type="text" name="gallary_image_name" class="form-control" id="name" required placeholder="Short description about image" value="{{ old('gallary_image_name') }}">
                     </div>
 
                     <div class="mb-3">
                         <label for="gallary_image" class="form-label">Gallary Image</label>
-                        <input type="file" name="gallary_image" class="form-control" id="gallary_image" required>
+                        <input type="file" name="gallary_image" class="form-control" id="gallary_image" required accept=".png, .jpeg, .jpg, .gif, .webp">
                     </div>
                 </form>
             </div>

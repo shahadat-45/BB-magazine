@@ -20,7 +20,7 @@ text-align: center;
 }
 .container h1 {
 font-size: 6rem;
-color: #ff6f61;
+color: #dbb574;
 margin: 0;
 }
 .container h2 {
@@ -37,13 +37,13 @@ margin-top: 1em;
 padding: 0.8em 2em;
 font-size: 1rem;
 color: #fff;
-background-color: #ff6f61;
+background-color: #dbb574;
 text-decoration: none;
 border-radius: 5px;
 transition: background-color 0.3s ease;
 }
 .container a:hover {
-background-color: #ff3e2f;
+background-color: #c9a25e;
 }
 </style>
 </head>

@@ -14,7 +14,7 @@
             <div class="col">
               <div class="mb-3">
                 <label for="logo" class="form-label">Logo</label>
-                <input type="file" name="logo" class="form-control" id="logo" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+                <input type="file" name="logo" class="form-control" id="logo" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])" accept=".png, .jpeg, .jpg, .webp">
                 @error('logo') <span class="text-danger">{{ $message }}</span> @enderror
                 <img style="background-color: dimgrey;" class="mt-2 rounded" height="40px" src="{{ asset($setting->logo ?? '') }}" id="blah">
               </div>
@@ -22,7 +22,7 @@
             <div class="col">                  
               <div class="mb-3">
                 <label for="favicon" class="form-label">Favicon</label>
-                <input type="file" name="favicon" class="form-control" id="favicon">
+                <input type="file" name="favicon" class="form-control" id="favicon" accept=".png, .jpeg, .jpg, .webp">
                 @error('favicon') <span class="text-danger">{{ $message }}</span> @enderror
                 <img class="mt-2 rounded" height="30px" src="{{ asset($setting->favicon ?? '') }}" alt="">
               </div>

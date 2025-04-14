@@ -37,6 +37,10 @@ class BackendController extends Controller
     }
     public function update(Request $request)
     {
+        $request->merge([
+            'title' => strip_tags($request->title),
+            'promo_title' => strip_tags($request->promo_title),
+        ]);
         $request->validate([
             'logo'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'favicon'   => 'nullable|image|mimes:jpeg,png,jpg,webp|max:100',
@@ -261,6 +265,11 @@ class BackendController extends Controller
     }
     public function description(Request $request, $id = null)
     {
+        $request->validate([
+            'title' => 'required|string|max:150',
+            'description'  => 'required|string|max:500',
+        ]);
+
         $data = Description::find($id);
         $exists = Description::find($id);
     

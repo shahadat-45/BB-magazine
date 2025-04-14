@@ -5,12 +5,35 @@
         .note-editable{
             min-height: 200px;
         }
+        /* Image preview styling */
+        #image-preview-container .img-thumbnail {
+            object-fit: cover;
+            width: 100%;
+            height: 150px;
+        }
+
+        #image-preview-container .position-relative {
+            transition: all 0.3s ease;
+        }
+
+        #image-preview-container .position-relative:hover {
+            transform: scale(1.05);
+        }
+
+        .remove-image-btn {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .position-relative:hover .remove-image-btn {
+            opacity: 1;
+        }
     </style>
 @endpush
 @section('contant')
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Create New Blog</h5>
+            <h5 class="card-title fw-semibold mb-4">Create New Magazine</h5>
 
             <!-- Success Message -->
             @if (session('success'))
@@ -19,12 +42,12 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('magazines.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Blog Title -->
                         <div class="mb-3">
-                            <label for="title" class="form-label">Blog Title</label>
+                            <label for="title" class="form-label">Magazine Title</label>
                             <input type="text" name="title" class="form-control @error('title') is-invalid @enderror"
                                 id="title" placeholder="Enter a title" value="{{ old('title') }}">
                             @error('title')
@@ -42,37 +65,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div class="row">
-                            <div class="col">
-                                <!-- Blog Category -->
-                                <div class="mb-3">
-                                    <label for="category" class="form-label">Blog Category</label>
-                                    <select class="form-control select2-show-search" data-placeholder="Select One"
-                                        name="category_id" data-validation="required">
-                                        <option selected disabled label="Choose one"></option>
-                                        @foreach ($categories as $item)
-                                            @if (old('category_id'))
-                                                <option value="{{ $item->id }}" class="{{ old('category_id') == $item->id ? '' : 'd-none' }}" {{ old('category_id') == $item->id ? 'selected' : '' }}>{{ ucwords($item->name) }}</option>
-                                            @endif
-                                            <option value="{{ $item->id }}" class="{{ old('category_id') == $item->id ? 'd-none' : '' }}">{{ ucwords($item->name) }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('category_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col">
-                                <!-- Blog Tags -->
-                                <div class="mb-3">
-                                    <label for="tag" class="form-label">Tags</label>
-                                    <input type="text" name="tags" class="form-control" id="tag"
-                                        placeholder="example: lifestyle,colorful,trending,another"
-                                        value="{{ old('tags') }}">
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="row">
                             <div class="col-md-4">
                                 <!-- Blog Category -->
@@ -130,19 +123,7 @@
 
                         </div>
                       
-                        <div class="row">
-                            <div class="col">
-                                <!-- Author Name -->
-                                <div class="mb-3">
-                                    <label for="author" class="form-label">News 
-                                      Type
-                                    </label>
-                                    <select class="form-control select2-show-search" data-placeholder="Select One" name="type" data-validation="required" id="type">
-                                        <option value="news" {{ old('type') == 'news' ? 'selected' : '' }}>Daily News</option>
-                                        <option value="magazine" {{ old('type') == 'magazine' ? 'selected' : '' }}>Monthly Magazine</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="row">                            
                             <div class="col">
                                 <!-- Publish Date -->
                                 <div class="mb-3">
@@ -153,9 +134,20 @@
                             </div>
                         </div>
 
+                        <!-- Image Upload Section -->
+                        <div class="mb-3">
+                            <label for="images" class="form-label">Upload Images</label>
+                            <input type="file" class="form-control" id="images" name="images[]" multiple accept="image/*">
+                        </div>
+
+                        <!-- Preview Area -->
+                        <div class="row mb-3" id="image-preview-container">
+                            <!-- Preview images will appear here -->
+                        </div>
+
                         <!-- Blog Content -->
                         <div class="mb-3 bootstrap-scope">
-                            <label for="content" class="form-label">Blog Content</label>
+                            <label for="content" class="form-label">Magazine Content</label>
                             <textarea class="form-control @error('content') is-invalid @enderror" id="summernote" rows="12" name="content"
                                 placeholder="Enter full content with styles">{{ old('content') }}</textarea>
                             @error('content')
@@ -168,7 +160,8 @@
                           <div class="col-md-6">
 
                             <div class="mb-2">
-                                <label for="thumnail_image" class="form-label">Thumbnail Image</label>
+                                <label for="thumnail_image" class="form-label me-2">Thumbnail Image</label>
+                                <small>Required image size (285 X 400)</small>
                                 <input type="file" name="thumnail_image"
                                     class="form-control @error('thumnail_image') is-invalid @enderror" id="thumnail_image"
                                     onchange="document.getElementById('blah2').src = window.URL.createObjectURL(this.files[0])" accept=".png, .jpeg, .jpg, .gif, .webp">
@@ -177,35 +170,7 @@
                                 @enderror
                                 <img class="mt-2 rounded" height="80px" src="" id="blah2">
                             </div>
-                          </div>
-                        
-                          <div class="col-md-6">
-
-                            <div class="mb-2">
-                                <label for="featured_image" class="form-label">Featured Image</label>
-                                <input type="file" name="featured_image"
-                                    class="form-control @error('featured_image') is-invalid @enderror" id="featured_image"
-                                    onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])" accept=".png, .jpeg, .jpg, .gif, .webp">
-                                @error('featured_image')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                <img class="mt-2 rounded" height="80px" src="" id="blah">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="mb-2 d-flex gap-2">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="radio" role="switch" name="featured" id="flexSwitchCheckDefault" value="featured">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Is Featured</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="radio" role="switch" name="featured" id="flexSwitchCheckChecked" value="pinned">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">Is Pinned</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="radio" role="switch" name="featured" id="flexSwitchCheckDisabled" value="editorial">
-                                <label class="form-check-label" for="flexSwitchCheckDisabled">Is Editorial</label>
-                            </div>
+                          </div>                    
                         </div>
                         <div class="mb-2">
                           <label class="form-check form-switch">
@@ -213,7 +178,6 @@
                             <span class="form-check-label" for="toggleButton">Status</span>
                           </label>
                         </div>
-
                         <button type="submit" class="btn btn-success">Create</button>
                     </form>
                 </div>
@@ -295,7 +259,58 @@
         });
 
     });
-
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('images');
+        const previewContainer = document.getElementById('image-preview-container');
+        
+        imageInput.addEventListener('change', function() {
+            previewContainer.innerHTML = '';
+            
+            if (this.files) {
+                Array.from(this.files).forEach(file => {
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            const colDiv = document.createElement('div');
+                            colDiv.className = 'col-md-3 mb-2';
+                            
+                            const imgContainer = document.createElement('div');
+                            imgContainer.className = 'position-relative';
+                            
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'img-thumbnail';
+                            img.style.maxHeight = '150px';
+                            
+                            const removeBtn = document.createElement('button');
+                            removeBtn.type = 'button';
+                            removeBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0';
+                            removeBtn.innerHTML = '&times;';
+                            removeBtn.onclick = function() {
+                                colDiv.remove();
+                                // Remove the file from the input
+                                const dataTransfer = new DataTransfer();
+                                Array.from(imageInput.files).forEach(f => {
+                                    if (f !== file) dataTransfer.items.add(f);
+                                });
+                                imageInput.files = dataTransfer.files;
+                            };
+                            
+                            imgContainer.appendChild(img);
+                            imgContainer.appendChild(removeBtn);
+                            colDiv.appendChild(imgContainer);
+                            previewContainer.appendChild(colDiv);
+                        }
+                        
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    });
 </script>
 
 @endpush

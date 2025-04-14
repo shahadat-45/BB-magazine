@@ -126,7 +126,7 @@
     <!-- Copyright Section -->
     <div class="mt-6 max-w-6xl mx-auto text-sm text-gray-500 py-4">
         <div class="flex flex-wrap lg:space-x-4 justify-center">
-            <span class="w-full sm:w-auto text-center">© 2025 Brand Bangladesh Developed by <a href="https://shahadat.42web.io/" rel="nofollow" target="_blank">Shahadat.Web</a></span>
+            <span class="w-full sm:w-auto text-center">© 2025 Brand Bangladesh Developed by <a href="https://qourin.com/" rel="nofollow" target="_blank">QOURIN</a></span>
             <div class="w-full sm:w-auto text-center space-y-2 sm:space-y-0 sm:ml-4 mt-2 sm:mt-0">
                 <a href="{{ route("under-construction") }}"
                     class="hover:underline block sm:inline-block sm:mr-4">Privacy Policy</a>

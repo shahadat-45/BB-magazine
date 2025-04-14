@@ -53,6 +53,7 @@
         </div>
       </div>
     </div>
+    <div class="page-wrapper" style="background-image: url({{ asset('public/assets/images/logos/login-page-background.jpg') }}); background-size: cover; background-position: center; height: 100vh; position: absolute; inset: 0; opacity: 0.1; z-index: -1;"></div>
   </div>
   <script src="{{ asset('assets') }}/libs/jquery/dist/jquery.min.js"></script>
   <script src="{{ asset('assets') }}/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -9,10 +9,10 @@
         </button>
 
         <!-- Search Modal with Dark Overlay -->
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center pt-24 px-5 lg:px-0 search-modal-container" style="display: none">
+        <div class="fixed inset-0 bg-[#ffffff80] bg-opacity-50 flex items-start justify-center pt-24 px-5 lg:px-0 search-modal-container" style="display: none">
 
             <!-- Close Button (OUTSIDE MODAL) -->
-            <button class="absolute top-5 right-5 text-white text-2xl hover:text-gray-300 search-modal-close">
+            <button class="absolute top-5 right-5 text-black text-2xl hover:text-gray-300 search-modal-close">
                 ✖
             </button>
 

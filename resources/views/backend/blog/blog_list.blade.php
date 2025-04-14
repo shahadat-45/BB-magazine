@@ -1,4 +1,11 @@
 @extends('backend.master')
+@push('css')
+    <style>
+        .dataTables_wrapper .dataTables_length select {
+            min-width: 55px;
+        }
+    </style>
+@endpush
 @section('contant')
     <div class="row">
         <div class="mb-4 d-flex justify-content-end gap-2 align-items-center">
@@ -36,11 +43,11 @@
                         <div class="mb-3">
                             <label for="category" class="form-label">Category</label>
                             <input type="text" name="name" class="form-control" id="category"
-                                placeholder="Enter category name" required>
+                                placeholder="Enter category name" required value="{{ old('name') }}">
                         </div>
                         <div class="mb-3">
                             <label for="category_img" class="form-label">Image</label>
-                            <input type="file" name="image" class="form-control" id="category_img" required>
+                            <input type="file" name="image" class="form-control" id="category_img" required accept=".png, .jpeg, .jpg, .gif, .webp">
                         </div>
                         <div class="d-flex gap-3">
                             <div class="form-check">
@@ -90,7 +97,7 @@
                         <tbody>
                             @foreach ($categories as $i => $category)
                                 <tr>
-                                    <th><img src="{{ asset($category->image) }}" width="60px"></th>
+                                    <th><img src="{{ $category->image ? asset($category->image) : asset('assets/images/no_image.jpg') }}" width="60px"></th>
                                     <td>{{ $category->name }}</td>
                                     <td>
                                         <form action="{{ route('category.status.update', $category->id) }}" method="POST"
@@ -170,7 +177,6 @@
             </div>
         </div>
     @endif
-
 
     <div class="row">
         <div class="col-sm-12">

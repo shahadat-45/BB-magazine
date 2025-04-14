@@ -4,9 +4,8 @@
         <div class="w-full lg:w-3/4 space-y-4">
             <!-- Row 1: First image 3 col-span, second image 2 col-span -->
             <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
-                @foreach ($latestNews->take(2) as $news)
-                    <div
-                        class="relative {{ $loop->index == 0 ? "col-span-3" : "col-span-2" }} overflow-hidden bg-white shadow group">
+                @foreach ($latestNews->slice(0, 2) as $news)
+                    <div class="relative {{ $loop->index == 0 ? "col-span-3" : "col-span-2" }} overflow-hidden bg-white shadow group">
                         <a href="{{ route("news.view", $news->slug) }}">
                             <img src="{{ asset($news->thumnail_image) }}" alt="{{ $news->title }}"
                                 class="h-[300px] w-full object-cover transition duration-1000 ease-in-out group-hover:scale-125" />
@@ -102,7 +101,7 @@
                 <div class="swiper-wrapper">
                     @foreach ($magazines as $magazine)
                         <div class="swiper-slide">
-                            <a href="{{ route("news.view", $magazine->slug) }}">
+                            <a href="{{ route("magazine.view", $magazine->slug) }}">
                                 <div class="bg-white border shadow-lg overflow-hidden group">
                                     <img src="{{ asset($magazine->thumnail_image) }}"
                                     class="w-full h-[400px] object-cover transition duration-700 ease-in-out group-hover:scale-110"
@@ -144,29 +143,29 @@
     </div>
 </section>
 
-        <!-- Magazine Script -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const dates = @json($dates);
-                const dateElement = document.querySelector(".magazine-date");
+<!-- Magazine Script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dates = @json($dates);
+        const dateElement = document.querySelector(".magazine-date");
 
-                const swiper = new Swiper(".new-magazine", {
-                    speed: 500,
-                    slidesPerView: 1,
-                    spaceBetween: 11,
-                    loop: true,
-                    navigation: {
-                        nextEl: ".magazine-next",
-                        prevEl: ".magazine-prev",
-                    },
-                    on: {
-                        slideChange: function() {
-                            const activeIndex = this.realIndex;
-                            dateElement.textContent = dates[activeIndex] ?? 'No Data';
-                        },
-                    },
-                });
+        const swiper = new Swiper(".new-magazine", {
+            speed: 500,
+            slidesPerView: 1,
+            spaceBetween: 11,
+            loop: true,
+            navigation: {
+                nextEl: ".magazine-next",
+                prevEl: ".magazine-prev",
+            },
+            on: {
+                slideChange: function() {
+                    const activeIndex = this.realIndex;
+                    dateElement.textContent = dates[activeIndex] ?? 'No Data';
+                },
+            },
+        });
 
-                dateElement.textContent = dates[swiper.realIndex] ?? 'No Data';
-            });
-        </script>
+        dateElement.textContent = dates[swiper.realIndex] ?? 'No Data';
+    });
+</script>
