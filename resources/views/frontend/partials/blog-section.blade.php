@@ -101,7 +101,7 @@
                 <div class="swiper-wrapper">
                     @foreach ($magazines as $magazine)
                         <div class="swiper-slide">
-                            <a href="{{ route("magazine.view", $magazine->slug) }}">
+                            <a href="{{ route("news.view", $magazine->slug) }}">
                                 <div class="bg-white border shadow-lg overflow-hidden group">
                                     <img src="{{ asset($magazine->thumnail_image) }}"
                                     class="w-full h-[400px] object-cover transition duration-700 ease-in-out group-hover:scale-110"
@@ -143,29 +143,29 @@
     </div>
 </section>
 
-<!-- Magazine Script -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const dates = @json($dates);
-        const dateElement = document.querySelector(".magazine-date");
+        <!-- Magazine Script -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const dates = @json($dates);
+                const dateElement = document.querySelector(".magazine-date");
 
-        const swiper = new Swiper(".new-magazine", {
-            speed: 500,
-            slidesPerView: 1,
-            spaceBetween: 11,
-            loop: true,
-            navigation: {
-                nextEl: ".magazine-next",
-                prevEl: ".magazine-prev",
-            },
-            on: {
-                slideChange: function() {
-                    const activeIndex = this.realIndex;
-                    dateElement.textContent = dates[activeIndex] ?? 'No Data';
-                },
-            },
-        });
+                const swiper = new Swiper(".new-magazine", {
+                    speed: 500,
+                    slidesPerView: 1,
+                    spaceBetween: 11,
+                    loop: true,
+                    navigation: {
+                        nextEl: ".magazine-next",
+                        prevEl: ".magazine-prev",
+                    },
+                    on: {
+                        slideChange: function() {
+                            const activeIndex = this.realIndex;
+                            dateElement.textContent = dates[activeIndex] ?? 'No Data';
+                        },
+                    },
+                });
 
-        dateElement.textContent = dates[swiper.realIndex] ?? 'No Data';
-    });
-</script>
+                dateElement.textContent = dates[swiper.realIndex] ?? 'No Data';
+            });
+        </script>

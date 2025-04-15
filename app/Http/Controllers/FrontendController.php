@@ -6,7 +6,6 @@ use App\Models\BlogCategory;
 use App\Models\Contact;
 use App\Models\Emails;
 use App\Models\Gallery;
-use App\Models\Magazine;
 use App\Models\News;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,17 +30,11 @@ class FrontendController extends Controller
             ->take(6)
             ->latest()
             ->get();
+        $dates = News::select('date')->get()->map(function ($news) {
+                return Carbon::parse($news->date)->format('M, Y');
+            })->toArray();
 
-        // $magazines = Magazine::where('status', 1)->take(4)->get();
-        $magazines = Magazine::where('status', 1)
-            ->orderByRaw('YEAR(date) DESC, MONTH(date) DESC')
-            ->latest()
-            ->take(4)
-            ->get();
-            
-        $dates = $magazines->map(function ($magazine) {
-            return Carbon::parse($magazine->date)->format('M, Y');
-        })->toArray();
+        $magazines = News::where('type' , 'magazine')->latest()->take(4)->get();
 
         $popularNews = News::select('id', 'title', 'slug', 'author', 'read_count')
             ->where('status', 1)

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use App\Models\BlogCategory;
-use App\Models\Magazine;
-use App\Models\MagazineImage;
 use App\Models\News;
 use App\Models\ShipDistrict;
 use App\Models\ShipDivision;
@@ -35,6 +34,7 @@ class BlogController extends Controller
     }
     public function blog()
     {
+
         $blogs = News::orderBy('created_at', 'desc')->paginate(8);
         $categories = BlogCategory::all();
         return view('frontend.blog.index', compact(['blogs', 'categories']));
@@ -128,6 +128,7 @@ class BlogController extends Controller
             'state_id'          => $request->state_id,
             'category_id'       => $request->category_id,
             'title'             => $request->title,
+            'type'              => $request->type,
             'slug'              => Str::slug($request->title),
             'short_description' => $request->short_description,
             'content'           => $request->content,
@@ -144,7 +145,7 @@ class BlogController extends Controller
         logActivity('Create', "Added a new news article: {$request->title}", 'News', $id);
         
         $notification = array(
-            'message' => 'News Created Successfully',
+            'message' => 'News Inserted Successfully',
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
@@ -186,7 +187,7 @@ class BlogController extends Controller
             'created_at' => Carbon::now(),
         ]);
 
-        return back()->with('success', 'News category added successfully!');
+        return back()->with('success', 'Blog category added successfully!');
     }
 
     public function categoryStatusUpdate($id)
@@ -217,7 +218,7 @@ class BlogController extends Controller
         }
         $blog->delete();
 
-        return back()->with('category_deleted', 'News category deleted successfully!');
+        return back()->with('category_deleted', 'Blog category deleted successfully!');
     }
 
     public function blogUpdate(Request $request, $id)
@@ -284,6 +285,7 @@ class BlogController extends Controller
         $news->state_id  = $request->state_id;
         $news->category_id = $request->category_id;
         $news->title = $request->title;
+        $news->type = $request->type;
         $news->featured = $request->featured;
         $news->slug  = Str::slug($request->title);
         $news->short_description  = $request->short_description;
@@ -343,260 +345,5 @@ class BlogController extends Controller
             })
             ->rawColumns(['featured_image', 'thumnail_image', 'status', 'action']) // important!
             ->make(true);
-    }
-    public function magazineCreate(){
-
-        $categories = BlogCategory::orderBy('name', 'ASC')->get();
-        $divisions = ShipDivision::orderBy('division_name', 'ASC')->get();
-
-        return view('backend.magazine.create', compact('categories', 'divisions'));
-    }
-    public function magazineStore(Request $request) {
-
-        $request->validate([
-            'title'        => 'required|string|max:255',
-            'content'      => 'required',
-            'division_id'   => 'required',
-            'district_id'   => 'required',
-            'state_id'      => 'required',
-            'short_description'   => 'required',
-            'thumnail_image'   => 'required|image|mimes:png,jpg,jpeg,gif,webp|max:2048',
-        ],[
-            'category_id'   => 'The category is required.',
-            'division_id'   => 'The division is required.',
-            'district_id'   => 'The district is required.',
-            'state_id'      => 'The state is required.',
-        ]);
-
-        if ($request->file('thumnail_image')) {
-
-            $image = $request->file('thumnail_image');
-            $manager = new ImageManager(new Driver());
-            $thumnailname = 'thumnail_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
-            $img = $manager->read($image);
-            $img->save(public_path('backend/magazine/' . $thumnailname));
-        }
-
-        $id = Magazine::insertGetId([
-            'user_id'           => Auth::user()->id,
-            'division_id'       => $request->division_id,
-            'district_id'       => $request->district_id,
-            'state_id'          => $request->state_id,
-            'title'             => $request->title,
-            'slug'              => Str::slug($request->title),
-            'short_description' => $request->short_description,
-            'content'           => $request->content,
-            'author'            => Auth::user()->name,
-            'date'              => $request->date ?? Carbon::now(),
-            'thumnail_image'    => 'backend/magazine/' . $thumnailname,
-            'status'            => $request->status ?? 0,
-            'created_at'        => Carbon::now(),
-        ]);
-        
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image)
-            {
-                $manager = new ImageManager(new Driver());
-                // Generate unique filename
-                $timestamp = now()->format('Ymd_His');
-                $randomString = Str::random(6);
-                $extension = strtolower($image->getClientOriginalExtension());
-                $filename = "featured_{$timestamp}_{$randomString}.{$extension}";
-
-                $directory = 'backend/magazine/' . $filename;
-        
-                // Save original image
-                $originalImage = $manager->read($image);
-                $originalImage->save(public_path($directory));
-        
-                MagazineImage::create([
-                    'magazine_id' => $id,
-                    'path' => $directory,
-                ]);
-            }
-        }
-
-        logActivity('Create', "A monthly magazine is created: {$request->title}", 'Magazine', $id);
-        
-        $notification = array(
-            'message' => 'Magazine Created Successfully',
-            'alert-type' => 'success'
-        );
-        return redirect()->back()->with($notification);
-    }
-    public function manageMagazine(){
-        $blogs = Magazine::orderBy('created_at', 'desc')->get();
-        return view('backend.magazine.manage', compact(['blogs']));
-    }
-    public function magazineUpdate(Request $request, $id )
-    {
-        $news = Magazine::find($id);
-        
-        $request->merge([
-            'title' => strip_tags($request->title),
-            'short_description' => strip_tags($request->short_description),
-        ]);
-        // Step 1: Basic validation
-        $request->validate([
-            'title'             => 'required|string|max:255',
-            'content'           => 'required',
-            'division_id'       => 'required',
-            'district_id'       => 'required',
-            'state_id'          => 'required',
-            'short_description' => 'required',
-            'thumnail_image'    => 'nullable|image|mimes:png,jpg,jpeg,gif,webp',
-        ]);
-
-        // Step 2: Manually check image presence if no file and no old image
-        if (!$request->hasFile('thumnail_image') && !$news->thumnail_image) {
-            return back()->withErrors(['thumnail_image' => 'Thumbnail image is required.'])->withInput();
-        }
-
-        // Step 3: Update images if new ones are uploaded
-        if ($request->file('thumnail_image')) {
-            if (file_exists(public_path($news->thumnail_image))) {
-                unlink(public_path($news->thumnail_image));
-            }
-            $image = $request->file('thumnail_image');
-            $manager = new ImageManager(new Driver());
-            $thumnailname = 'thumnail_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
-            $img = $manager->read($image);
-            $img->save(public_path('backend/magazine/' . $thumnailname));
-            $news->thumnail_image = 'backend/magazine/' . $thumnailname;
-        }
-
-        // Step 4: Update remaining fields
-        $news->user_id = Auth::user()->id;
-        $news->division_id = $request->division_id;
-        $news->district_id = $request->district_id;
-        $news->state_id  = $request->state_id;
-        $news->title = $request->title;
-        $news->slug  = Str::slug($request->title);
-        $news->short_description  = $request->short_description;
-        $news->content = $request->content;
-        $news->author = Auth::user()->name;
-        $news->date  = $request->date ?? Carbon::now();
-        $news->status = $request->status ?? 0;
-        $news->updated_at = Carbon::now();
-
-        $news->save();
-
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image)
-            {
-                $manager = new ImageManager(new Driver());
-                // Generate unique filename
-                $timestamp = now()->format('Ymd_His');
-                $randomString = Str::random(6);
-                $extension = strtolower($image->getClientOriginalExtension());
-                $filename = "featured_{$timestamp}_{$randomString}.{$extension}";
-
-                $directory = 'backend/magazine/' . $filename;
-        
-                // Save original image
-                $originalImage = $manager->read($image);
-                $originalImage->save(public_path($directory));
-        
-                MagazineImage::create([
-                    'magazine_id' => $id,
-                    'path' => $directory,
-                ]);
-            }
-        }
-
-        logActivity('Update', "Updated the magazine article: {$request->title}", 'Magazine', $id);
-
-        $notification = array(
-            'message' => 'Magazine Updated Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
-    }
-    public function magazineEditPage($id)
-    {
-        $item = Magazine::find($id);
-        $divisions = ShipDivision::orderBy('division_name', 'ASC')->get();
-        return view('backend.magazine.update', compact(['item', 'divisions']));
-    }
-    public function getMagazineData()
-    {
-        $blogs = Magazine::all(); // eager load category
-
-        return DataTables::of($blogs)
-            ->addIndexColumn()
-            ->addColumn('thumnail_image', function ($blog) {
-                return '<img src="' . ($blog->thumnail_image ? asset($blog->thumnail_image) : asset('assets/images/no_image.jpg')) . '" width="60" height="60" class="rounded" />';
-            })
-            ->addColumn('status', function ($blog) {
-                return $blog->status == 1
-                    ? '<span class="badge bg-golden">Active</span>'
-                    : '<span class="badge bg-danger">Inactive</span>';
-            })
-            ->addColumn('action', function ($blog) {
-                $edit = route('magazine.edit', $blog->id);
-                $delete = route('delete.magazine', $blog->id);
-
-                return '
-                    <div class="d-flex gap-2">
-                        <a href="' . $edit . '" class="btn btn-sm btn-success" title="Edit">
-                            <i class="ti ti-edit"></i>
-                        </a>
-                        <a href="' . $delete . '" class="btn btn-sm btn-danger" title="Delete" id="delete">
-                            <i class="ti ti-trash"></i>
-                        </a>
-                    </div>
-                ';
-            })
-            ->rawColumns(['thumnail_image', 'status', 'action']) // important!
-            ->make(true);
-    }
-    public function deleteImage($id)
-    {
-        try {
-            $image = MagazineImage::find($id);
-            
-            // Delete files from storage
-            if (file_exists(public_path($image->path))) {
-                unlink(public_path($image->path));
-            }
-            
-            // Delete from database
-            $image->delete();
-            
-            return response()->json(['success' => true]);
-
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-        }
-    }
-
-    public function deleteMagazine($id)
-    {
-        $item = Magazine::find($id);
-
-        // Delete associated images
-        $images = MagazineImage::where('magazine_id', $id)->get();
-
-        foreach ($images as $image) {
-            if (file_exists(public_path($image->path))) {
-                unlink(public_path($image->path));
-            }
-            $image->delete();
-        }
-
-        if (file_exists(public_path($item->thumnail_image))) {
-            unlink(public_path($item->thumnail_image));
-        }
-
-        logActivity('Delete', "Deleted the magazine article: {$item->title}", 'Magazine', $id);
-        
-        $item->delete();
-
-        $notification = array(
-            'message' => 'Magazine Deleted Successfully',
-            'alert-type' => 'success'
-        );
-        return redirect()->back()->with($notification);
     }
 }

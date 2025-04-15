@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\GallaryController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BackendController;
 use App\Http\Controllers\BlogController;
@@ -21,7 +22,6 @@ Route::get('/page/blog', [BlogController::class, 'blog'])->name('page.blog');
 
 //Pages
 Route::get('/news/view/{slug}', [PageController::class, 'newsView'])->name('news.view');
-Route::get('/magazine/view/{slug}', [PageController::class, 'magazineView'])->name('magazine.view');
 Route::get('page/gallery', [PageController::class, 'gallery'])->name('frontend.gallery');
 Route::get('/all-categories', [PageController::class, 'allCategories'])->name('all-categories');
 Route::get('/category/{slug}', [PageController::class, 'category'])->name('frontend.category');
@@ -68,13 +68,42 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/gallery/delete/{id}', 'galleryDelete')->name('gallery.delete');
         Route::match(['get', 'post'], '/gallery/toggle_status', 'toggleStatus')->name('gallery.toggleStatus');
     });
+// role and permission
+       // permission all route
+       Route::controller(RoleController::class)->middleware(['permission:permission.all'])->group(function () {
 
+        //permission management
+        Route::get('all/permission', 'allPermission')->name('all.permission');
+        Route::get('add/permission', 'addPermission')->name('add.permission');
+        Route::post('store/permission', 'storePermission')->name('store.permission');
+        Route::get('edit/permission/{id}', 'editPermission')->name('edit.permission');
+        Route::post('update/permission', 'updatePermission')->name('update.permission');
+        Route::get('delete/permission/{id}', 'deletePermission')->name('delete.permission');
+        // Route::get('import/permission', 'importPermission')->name('import.permission');
+        // Route::get('export/permission', 'exportPermission')->name('export.permission');
+        // Route::post('store/import/permission', 'storeImportPermission')->name('store.import.permission');
+        //role all route
+        Route::get('all/roles', 'allRoles')->name('all.role');
+        Route::get('add/role', 'addRole')->name('add.role');
+        Route::post('store/role', 'storeRole')->name('store.role');
+        Route::get('edit/role/{id}', 'editRole')->name('edit.role');
+        Route::post('update/role', 'updateRole')->name('update.role');
+        Route::get('delete/role/{id}', 'deleteRole')->name('delete.role');
+        // role have permission all route
+        Route::get('role/have/permission', 'addRoleHavePermission')->name('add.role.have.permission');
+        Route::post('role/permission/store', 'storeRolePermission')->name('role.permission.store');
+        Route::get('assign/permission/of/role', 'assignPermissionOfRole')->name('assign.permission.of.role');
+        Route::get('edit/assigned/permission/{id}', 'editAssignedPermission')->name('edit.assigned.permission');
+        Route::post('update/assigned/permission/{id}', 'updateAssignedPermission')->name('update.assigned.permission');
+        Route::get('delete/assigned/permission/{id}', 'deleteAssignedPermission')->name('delete.assigned.permission');
+    });
     //Blog Section
     Route::get('/blog/list', [BlogController::class, 'blogList'])->name('blog.list');
     Route::get('/blog/create', [BlogController::class, 'blogCreate'])->name('blog.create');
     Route::match(['get', 'post'], '/blog/store', [BlogController::class, 'blogStore'])->name('blog.store');
     Route::get('/blog/delete/{id}', [BlogController::class, 'blogDelete'])->name('delete.blog');
     Route::get('/blog/edit/{id}', [BlogController::class, 'editBlog'])->name('edit.blog');
+    Route::match(['get', 'post'], '/blog/update/{id}', [BlogController::class, 'blogUpdate'])->name('blog.update');
     Route::match(['get', 'post'], '/blog/update/{id}', [BlogController::class, 'blogUpdate'])->name('blog.update');
     Route::get('district-get/ajax/{division_id}',[BlogController::class, 'getDistrictWithAjax']);
     Route::get('state-get/ajax/{district_id}',[BlogController::class, 'getStateWithAjax']);
@@ -85,16 +114,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::match(['get', 'post'], '/category/status/update/{id}', [BlogController::class, 'categoryStatusUpdate'])->name('category.status.update');
     //Description
     Route::match(['get', 'post'], '/description/edit/{id}', [BackendController::class, 'description'])->name('description');
-    //Magazine
-    Route::get('/magazine/create', [BlogController::class, 'magazineCreate'])->name('create.magazine');
-    Route::get('/manage/magazine', [BlogController::class, 'manageMagazine'])->name('manage.magazine');
-    Route::match(['get', 'post'], '/magazine', [BlogController::class, 'magazineStore'])->name('magazines.store');
-    Route::get('/magazine/edit/{id}', [BlogController::class, 'magazineEditPage'])->name('magazine.edit');
-    Route::match(['get', 'post'], '/magazine/update/{id}', [BlogController::class, 'magazineUpdate'])->name('magazine.update');
-    Route::get('/magazine/data', [BlogController::class, 'getMagazineData'])->name('magazine.data');
-    Route::get('/magazine-images/{id}', [BlogController::class, 'deleteImage'])->name('magazine.images.delete');
-    Route::get('/magazine/delete/{id}', [BlogController::class, 'deleteMagazine'])->name('delete.magazine');
-
 });
 
 Route::middleware('auth')->group(function () {

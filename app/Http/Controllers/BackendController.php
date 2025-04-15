@@ -18,22 +18,25 @@ use App\Models\Testimonial;
 use App\Models\User;
 use Carbon\Carbon;
 use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager; 
+use Intervention\Image\ImageManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
+use Spatie\Permission\Models\Permission;
 
 class BackendController extends Controller
 {
-    
-    public function settings(){
+
+    public function settings()
+    {
 
         $setting = Setting::find(1);
 
-        return view('backend.settings' ,  compact('setting'));
+        return view('backend.settings',  compact('setting'));
     }
     public function update(Request $request)
     {
@@ -72,7 +75,7 @@ class BackendController extends Controller
                 unlink(public_path($setting->logo));
             }
 
-            $image = $request->file('logo');  
+            $image = $request->file('logo');
             $manager = new ImageManager(new Driver());
             $name = 'logo_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
             $img = $manager->read($image);
@@ -86,14 +89,14 @@ class BackendController extends Controller
                 unlink(public_path($setting->favicon));
             }
 
-            $image = $request->file('favicon');  
+            $image = $request->file('favicon');
             $manager = new ImageManager(new Driver());
             $name = 'favicon_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
             $img = $manager->read($image);
             $img->save(public_path('backend/setting/' . $name));
 
             $setting->favicon = 'backend/setting/' . $name;
-        }        
+        }
 
         $setting->title         = $request->title;
         $setting->address       = $request->address;
@@ -104,7 +107,7 @@ class BackendController extends Controller
         $setting->youtube       = $request->youtube;
         $setting->instagram     = $request->instagram;
         $setting->linkedin      = $request->linkedin;
-        $setting->map_link      = $request->map_link;        
+        $setting->map_link      = $request->map_link;
         $setting->whats_app     = $request->whats_app;
         $setting->promo_title   = $request->promo_title;
         $setting->promo_desp    = $request->promo_desp;
@@ -116,21 +119,23 @@ class BackendController extends Controller
         return back()->with('success', 'Settings updated successfully!');
     }
 
-    public function heroSection(){
+    public function heroSection()
+    {
         $data = HeroSection::find(1);
         return view('backend.hero_section', compact('data'));
     }
 
-    public function heroUpdate(Request $request){
+    public function heroUpdate(Request $request)
+    {
         $data = HeroSection::find(1);
 
-        if ( $request->file('image')) {
-            
+        if ($request->file('image')) {
+
             if (is_file(public_path($data->image))) {
                 unlink(public_path($data->image));
             }
 
-            $image = $request->file('image');  
+            $image = $request->file('image');
             $manager = new ImageManager(new Driver());
             $name = 'first_banner_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
             $img = $manager->read($image);
@@ -147,23 +152,25 @@ class BackendController extends Controller
 
         return back()->with('success', 'Hero Section Updated Successfully!');
     }
-    
-    public function about_us(){
+
+    public function about_us()
+    {
         $data = AboutUs::find(1);
         $vision = AboutUs::find(2);
         $mission = AboutUs::find(3);
-        return view('backend.about_us', compact(['data' , 'vision' , 'mission']));
+        return view('backend.about_us', compact(['data', 'vision', 'mission']));
     }
-    public function about_us_update(Request $request){
+    public function about_us_update(Request $request)
+    {
         $data = AboutUs::find(1);
 
-        if ( $request->file('image')) {
-            
+        if ($request->file('image')) {
+
             if (is_file(public_path($data->image))) {
                 unlink(public_path($data->image));
             }
 
-            $image = $request->file('image');  
+            $image = $request->file('image');
             $manager = new ImageManager(new Driver());
             $name = 'about_us_banner_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
             $img = $manager->read($image);
@@ -181,16 +188,17 @@ class BackendController extends Controller
         return back()->with('success', 'Hero Section Updated Successfully!');
     }
 
-    public function visionUpdate(Request $request){
+    public function visionUpdate(Request $request)
+    {
         $data = AboutUs::find(2);
 
-        if ( $request->file('image')) {
-            
+        if ($request->file('image')) {
+
             if (is_file(public_path($data->image))) {
                 unlink(public_path($data->image));
             }
 
-            $image = $request->file('image');  
+            $image = $request->file('image');
             $manager = new ImageManager(new Driver());
             $name = 'our_vision_banner_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
             $img = $manager->read($image);
@@ -206,16 +214,17 @@ class BackendController extends Controller
         return back()->with('vision', 'Vision Content Updated Successfully!');
     }
 
-    public function missionUpdate(Request $request){
+    public function missionUpdate(Request $request)
+    {
         $data = AboutUs::find(3);
 
-        if ( $request->file('image')) {
-            
+        if ($request->file('image')) {
+
             if (is_file(public_path($data->image))) {
                 unlink(public_path($data->image));
             }
 
-            $image = $request->file('image');  
+            $image = $request->file('image');
             $manager = new ImageManager(new Driver());
             $name = 'our_mission_banner_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
             $img = $manager->read($image);
@@ -230,7 +239,7 @@ class BackendController extends Controller
 
         return back()->with('mission', 'Mission Content Updated Successfully!');
     }
-    
+
     public function newsletter(Request $request)
     {
         if ($request->ajax()) {
@@ -245,10 +254,11 @@ class BackendController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        
+
         return view('backend.newsletter');
     }
-    public function newsletter_update(Request $request){
+    public function newsletter_update(Request $request)
+    {
         $data = Newsletter::find(1);
 
         $data->title = $request->title;
@@ -257,11 +267,12 @@ class BackendController extends Controller
 
         return back()->with('success', 'Newsletter Section Updated Successfully!');
     }
-    public function newsletter_delete($id){
+    public function newsletter_delete($id)
+    {
 
         Emails::find($id)->delete();
 
-        return back()->with('succsess' , 'Email Deleted Successfully');
+        return back()->with('succsess', 'Email Deleted Successfully');
     }
     public function description(Request $request, $id = null)
     {
@@ -272,18 +283,18 @@ class BackendController extends Controller
 
         $data = Description::find($id);
         $exists = Description::find($id);
-    
-        if (!$data) {            
+
+        if (!$data) {
             $data = new Description();
             $data->id = $id;
         }
-    
+
         $data->title = $request->title;
         $data->description = $request->description;
         $data->save();
 
         logActivity(($exists ? "Updated" : "Created"), "{$request->title} : {$request->description}", 'Section Content', $id);
-         
+
         $notification = array(
             'message' => ($exists ? "Section Updated Successfully!" : "Section Created Successfully!"),
             'alert-type' => 'success'
@@ -291,11 +302,14 @@ class BackendController extends Controller
 
         return redirect()->back()->with($notification);
     }
-    public function userList(){
+    public function userList()
+    {
+        $roles = Role::all();
         $users = User::all();
-        return view('backend.user', compact('users'));
+        return view('backend.user', compact('users', 'roles'));
     }
-    public function registerByAdmin(Request $request){
+    public function registerByAdmin(Request $request)
+    {
         // Validate input data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -316,8 +330,8 @@ class BackendController extends Controller
             $manager = new ImageManager(new Driver());
             $imageName = 'users_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
             $img = $manager->read($image);
-            $img->save(public_path('backend/users/' . $imageName));  
-            $imagePath = 'backend/users/' . $imageName; 
+            $img->save(public_path('backend/users/' . $imageName));
+            $imagePath = 'backend/users/' . $imageName;
         }
 
         // Create user
@@ -328,13 +342,18 @@ class BackendController extends Controller
             'role' => $request->role,
             'image' => $imagePath,
         ]);
+        $user = User::findOrFail($id);
 
+        if ($request->role) {
+            $user->assignRole($request->role);
+        }
         logActivity('Create', "Added a new user: {$request->name} ({$request->email})", 'User', $id);
 
-        return back()->with('success' , 'User registered successfully');
+        return back()->with('success', 'User registered successfully');
     }
 
-    public function userUpdateByAdmin(Request $request , $id){
+    public function userUpdateByAdmin(Request $request, $id)
+    {
         // Validate input data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -359,7 +378,7 @@ class BackendController extends Controller
             $manager = new ImageManager(new Driver());
             $imageName = 'users_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
             $img = $manager->read($image);
-            $img->save(public_path('backend/users/' . $imageName));  
+            $img->save(public_path('backend/users/' . $imageName));
             $imagePath = 'backend/users/' . $imageName;
 
             $user->image = $imagePath;
@@ -368,14 +387,18 @@ class BackendController extends Controller
         $user->name = $request->name;
         $user->role = $request->role;
         $user->save();
-
+         $user->roles()->detach();
+        if ($request->role) {
+            $user->assignRole($request->role);
+        }
         logActivity('Update', "Updated user profile: {$request->name}", 'User', $id);
 
-        return back()->with('success' , 'User Updated successfully');
+        return back()->with('success', 'User Updated successfully');
     }
-    public function userDeleteByAdmin($id){
+    public function userDeleteByAdmin($id)
+    {
         $user = User::find($id);
-        
+
         if (!$user) {
             return back()->with('error', 'User not found');
         }
@@ -387,13 +410,13 @@ class BackendController extends Controller
 
         // Delete user image if exists
         if ($user->image) {
-            if(file_exists(public_path($user->image))) {
+            if (file_exists(public_path($user->image))) {
                 unlink(public_path($user->image));
             }
         }
 
         logActivity('Delete', "Deleted user: {$user->name} ({$user->email}", 'User', $id);
-        
+
         $user->delete();
         return back()->with('success', 'User deleted successfully');
     }
