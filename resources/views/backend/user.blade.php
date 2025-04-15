@@ -41,9 +41,13 @@
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
                 <select name="role" class="form-control" id="role" required>
-                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                    {{-- <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="editor" {{ old('role') == 'editor' ? 'selected' : '' }}>Editor</option>
-                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
+                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option> --}}
+                    @foreach ($roles as $role)
+
+                    <option value="{{$role->name}}">{{$role->name}}</option>
+                    @endforeach
                 </select>
                 @error('role') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
@@ -52,7 +56,7 @@
                 <input type="file" name="image" class="form-control" id="user_img" accept=".png, .jpeg, .jpg, .gif, .webp">
                 @error('image') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
-          </form>        
+          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -60,7 +64,7 @@
         </div>
       </div>
     </div>
-  </div>  
+  </div>
 <!-- User Update Modal -->
 @foreach ($users as $user)
     <div class="modal fade" id="userUpdateModal{{ $user->id }}" tabindex="-1" aria-labelledby="userUpdateLabel" aria-hidden="true">
@@ -84,9 +88,13 @@
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select name="role" class="form-control" id="role" required>
-                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                                {{-- <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="editor" {{ $user->role == 'editor' ? 'selected' : '' }}>Editor</option>
-                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option> --}}
+                                @foreach ($roles as $role)
+
+                                <option value="{{$role->name}}"{{$user->hasRole($role->name) ? 'selected' : ''}}>{{$role->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div>
@@ -140,7 +148,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <div class="card">        
+        <div class="card">
             <div class="card-body">
                 <h5 class="card-title fw-semibold mb-4">User List</h5>
                 @if (session('deleted'))
@@ -173,11 +181,11 @@
                                 </td>
                             </tr>
                         @endforeach
-                    </tbody>                
+                    </tbody>
                 </table>
             </div>
         </div>
-    </div>        
+    </div>
 </div>
 @endsection
 @push('script')
@@ -193,5 +201,5 @@
             confirmButtonText: 'OK'
         });
     </script>
-@endif    
+@endif
 @endpush

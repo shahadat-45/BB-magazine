@@ -53,17 +53,17 @@
                     </button>
                 </div>
             </div>
-            <ul class="dots flex">
+            {{-- <ul class="dots flex">
                 @foreach ($heroSliders as $index => $slider)
                     <li class="{{ $index == 0 ? "active" : "" }}"></li>
                 @endforeach
-            </ul>
+            </ul> --}}
         </div>
 
         <!-- Paragraph Below Carousel -->
-        <div id="shortContent" class="text-[#373737] text-[14.5px] mt-11">
+        {{-- <div id="shortContent" class="text-[#373737] text-[14.5px] mt-11">
             {{ Str::limit($heroSliders[0]->short_description, 250) }}
-        </div>
+        </div> --}}
     </div>
 </div>
 <style>
